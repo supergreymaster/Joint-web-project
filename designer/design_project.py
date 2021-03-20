@@ -5,6 +5,7 @@ from PyQt5.QtGui import QPixmap, QFont, QIcon
 
 class Constant:
     NAME_APPLICATIONS = "Работа с текстом"
+    COLOR_BACKGROUND =
 
 
 class Example(QWidget):
