@@ -27,4 +27,7 @@ class Title_animation:
                 if event.type == pygame.QUIT:
                     running = False
 
+            if pygame.time.get_ticks() == 3000:
+                running = False
+
 Title_animation()
