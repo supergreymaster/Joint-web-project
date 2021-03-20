@@ -15,20 +15,28 @@ class Request:
     def setTable(self, name):
         self.table = name
 
-    def get_request(self, request):
+    def get_request(self, request, tup=False):
         cur = self.base.cursor()
 
         result = cur.execute(f"SELECT value FROM {self.table} WHERE name == '{request}'").fetchall()[0][0]
         if not result and Admin.admin:
             print(f"По запросу {request} ничего не найдено")
+            return
+        if tup:
+            result = list(map(lambda x: int(x), result.split()))
+
         return result
 
-    def get_full_request(self, col_check, get_col, if_request):
+    def get_full_request(self, col_check, get_col, if_request, tup=False):
         cur = self.base.cursor()
 
         result = cur.execute(f"SELECT {get_col} FROM {self.table} WHERE {col_check} == '{if_request}'").fetchall()[0][0]
         if not result and Admin.admin:
             print(f"По запросу {if_request} ничего не найдено")
+            return
+        if tup:
+            result = list(map(lambda x: int(x), result.split()))
+
         return result
 
 
