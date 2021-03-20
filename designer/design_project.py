@@ -3,9 +3,7 @@ import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QLabel, QTextEdit
 from PyQt5.QtGui import QPixmap, QFont, QIcon
 
-class Constant:
-    NAME_APPLICATIONS = "Работа с текстом"
-    COLOR_BACKGROUND =
+from designer.secondary_functions import Request
 
 
 class Example(QWidget):
@@ -15,7 +13,7 @@ class Example(QWidget):
 
     def initUI(self):
         self.setGeometry(700, 700, 700, 700)
-        self.setWindowTitle(Constant.NAME_APPLICATIONS)
+        self.setWindowTitle(Request.get_request("title_name"))
 
 
 def except_hook(cls, exception, traceback):  # если произойдет ошибка то Pyqt5 не будет замалчивать её
