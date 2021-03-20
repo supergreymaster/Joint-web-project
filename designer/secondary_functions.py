@@ -18,10 +18,12 @@ class Request:
     def get_request(self, request, tup=False):
         cur = self.base.cursor()
 
-        result = cur.execute(f"SELECT value FROM {self.table} WHERE name == '{request}'").fetchall()[0][0]
+        result = cur.execute(f"SELECT value FROM {self.table} WHERE name == '{request}'").fetchall()
         if not result and Admin.admin:
             print(f"По запросу {request} ничего не найдено")
             return
+        else:
+            result = result[0][0]
         if tup:
             result = list(map(lambda x: int(x), result.split()))
 
@@ -50,3 +52,8 @@ class Admin:
 
 
 Admin()
+
+
+def pprint(text):
+    if Admin.admin:
+        print(text)
