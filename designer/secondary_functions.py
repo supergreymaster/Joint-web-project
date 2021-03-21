@@ -1,5 +1,6 @@
 import sqlite3
-
+import sys
+from win32api import GetSystemMetrics
 
 class Request:
     def __init__(self):
@@ -18,12 +19,16 @@ class Request:
     def get_request(self, request, tup=False):
         cur = self.base.cursor()
 
-        result = cur.execute(f"SELECT value FROM {self.table} WHERE name == '{request}'").fetchall()
+        result = cur.execute(f"SELECT value, win FROM {self.table} WHERE name == '{request}'").fetchall()
         if not result and Admin.admin:
             print(f"По запросу {request} ничего не найдено")
             return
         else:
-            result = result[0][0]
+            pprint(result, " Результат запроса ", request)
+            if result[0][1]:
+                result = window.adaptation(result[0][0])
+            else:
+                result = result[0][0]
         if tup:
             result = list(map(lambda x: int(x), result.split()))
 
@@ -42,6 +47,41 @@ class Request:
         return result
 
 
+class Work_size_window:
+    def __init__(self):
+        self.platform = sys.platform
+        if self.platform == "win32":
+            self.wight_window = GetSystemMetrics(0)
+            self.height_window = GetSystemMetrics(1)
+        else:
+            self.wight_window = 1920
+            self.height_window = 1080
+        pprint(self.platform, " Операционая система")
+        pprint("width=", self.wight_window, " Разрешение экрана")
+        pprint("height=", self.height_window, " Разрешение экрана")
+
+        self.coef_x = self.wight_window // 1920
+        self.coef_y = self.height_window // 1080
+
+    def get_w_h(self):
+        return self.wight_window, self.height_window
+
+    def change_size_window(self, size_x, size_y):
+        self.wight_window = size_x
+        self.height_window = size_y
+
+    def adaptation(self, value):
+        print(value)
+
+
+def pprint(*text):
+    if Admin.admin:
+        tmp = ''
+        for i in text:
+            tmp = tmp + str(i)
+        print(tmp)
+
+
 class Admin:
     admin = False
     file = open("data/text/admin.txt", encoding="utf-8").read()
@@ -52,8 +92,5 @@ class Admin:
 
 
 Admin()
+window = Work_size_window()
 
-
-def pprint(text):
-    if Admin.admin:
-        print(text)

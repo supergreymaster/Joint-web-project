@@ -3,7 +3,9 @@ import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QLabel, QTextEdit
 from PyQt5.QtGui import QPixmap, QFont, QIcon
 
-from designer.secondary_functions import Request
+from designer.secondary_functions import Request, Work_size_window
+
+REQUEST = Request()
 
 
 class Example(QWidget):
@@ -12,8 +14,8 @@ class Example(QWidget):
         self.initUI()
 
     def initUI(self):
-        self.setGeometry(700, 700, 700, 700)
-        self.setWindowTitle(Request.get_request("title_name"))
+        REQUEST.get_request("size_display")
+        self.setWindowTitle(REQUEST.get_request("title_name"))
 
 
 def except_hook(cls, exception, traceback):  # если произойдет ошибка то Pyqt5 не будет замалчивать её
