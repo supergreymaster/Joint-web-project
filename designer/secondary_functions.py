@@ -25,7 +25,7 @@ class Request:
             return
         else:
             pprint(result, " Результат запроса ", request)
-            if result[0][1]:
+            if result[0][1] == "True":
                 result = window.adaptation(result[0][0])
             else:
                 result = result[0][0]
@@ -41,6 +41,12 @@ class Request:
         if not result and Admin.admin:
             print(f"По запросу {if_request} ничего не найдено")
             return
+        else:
+            pprint(result, " Результат запроса ", if_request)
+            if result[0][1]:
+                result = window.adaptation(result[0][1])
+            else:
+                result = result[0][0]
         if tup:
             result = list(map(lambda x: int(x), result.split()))
 
@@ -71,8 +77,16 @@ class Work_size_window:
         self.height_window = size_y
 
     def adaptation(self, value):
-        print(value)
-
+        c = 0
+        text = ''
+        for i in value.split():
+            if c % 2 == 0:
+                text = text + str(int(int(i) * self.coef_x))  # здесь инт используется как уборка остатка
+            else:
+                text = text + str(int(int(i) * self.coef_y))
+            text = text + " "
+            c += 1
+        return text
 
 def pprint(*text):
     if Admin.admin:
