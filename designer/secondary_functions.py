@@ -68,7 +68,7 @@ class Work_size_window:
 
         self.coef_x = self.wight_window / 1920
         self.coef_y = self.height_window / 1080
-        self.coef_font = (self.coef_y + self.coef_x) / 2
+        self.coef_font = (self.coef_x / 2 + self.coef_y) / 1.5
         # self.coef_x = 1
         # self.coef_y = 1
         pprint(self.coef_x, " ", self.coef_y, " Коэфиценты")
