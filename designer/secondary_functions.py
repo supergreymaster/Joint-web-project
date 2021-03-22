@@ -16,25 +16,25 @@ class Request:
     def setTable(self, name):
         self.table = name
 
-    def get_request(self, request, tup=False):
+    def get_request(self, request, tup=False, color=False):
         cur = self.base.cursor()
 
-        result = cur.execute(f"SELECT value, win FROM {self.table} WHERE name == '{request}'").fetchall()
+        result = cur.execute(f"SELECT value FROM {self.table} WHERE name == '{request}'").fetchall()
         if not result and Admin.admin:
             print(f"По запросу {request} ничего не найдено")
             return
         else:
+            result = result[0][0]
             pprint(result, " Результат запроса ", request)
-            if result[0][1] == "True":
-                result = window.adaptation(result[0][0])
-            else:
-                result = result[0][0]
         if tup:
             result = list(map(lambda x: int(x), result.split()))
+        elif color:
+            result = list(map(lambda x: int(x), result.split()))
+            result = (result[0], result[1], result[2])
 
         return result
 
-    def get_full_request(self, col_check, get_col, if_request, tup=False):
+    def get_full_request(self, col_check, get_col, if_request, tup=False, color=False):
         cur = self.base.cursor()
 
         result = cur.execute(f"SELECT {get_col} FROM {self.table} WHERE {col_check} == '{if_request}'").fetchall()[0][0]
@@ -42,13 +42,13 @@ class Request:
             print(f"По запросу {if_request} ничего не найдено")
             return
         else:
+            result = result[0][0]
             pprint(result, " Результат запроса ", if_request)
-            if result[0][1]:
-                result = window.adaptation(result[0][1])
-            else:
-                result = result[0][0]
         if tup:
             result = list(map(lambda x: int(x), result.split()))
+        elif color:
+            result = list(map(lambda x: int(x), result.split()))
+            result = (result[0], result[1], result[2])
 
         return result
 
@@ -66,27 +66,36 @@ class Work_size_window:
         pprint("width=", self.wight_window, " Разрешение экрана")
         pprint("height=", self.height_window, " Разрешение экрана")
 
-        self.coef_x = self.wight_window // 1920
-        self.coef_y = self.height_window // 1080
+        self.coef_x = self.wight_window / 1920
+        self.coef_y = self.height_window / 1080
+        self.coef_font = (self.coef_y + self.coef_x) / 2
+        # self.coef_x = 1
+        # self.coef_y = 1
+        pprint(self.coef_x, " ", self.coef_y, " Коэфиценты")
 
     def get_w_h(self):
         return self.wight_window, self.height_window
+
 
     def change_size_window(self, size_x, size_y):
         self.wight_window = size_x
         self.height_window = size_y
 
-    def adaptation(self, value):
+    def adaptation(self, value, font=False):
+        if font:
+            if type(value) is list:
+                value = value[0]
+            return int(int(value) * self.coef_font)
         c = 0
-        text = ''
-        for i in value.split():
+        list_tmp = list()
+        for i in value:
             if c % 2 == 0:
-                text = text + str(int(int(i) * self.coef_x))  # здесь инт используется как уборка остатка
+                list_tmp.append(int(int(i) * self.coef_x))  # здесь инт используется как уборка остатка
             else:
-                text = text + str(int(int(i) * self.coef_y))
-            text = text + " "
+                list_tmp.append(int(int(i) * self.coef_y))
             c += 1
-        return text
+        return list_tmp
+
 
 def pprint(*text):
     if Admin.admin:
@@ -106,5 +115,4 @@ class Admin:
 
 
 Admin()
-window = Work_size_window()
 
