@@ -1,7 +1,7 @@
 import sys
 
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QLabel, QTextEdit
-from PyQt5.QtGui import QPixmap, QFont, QIcon
+from PyQt5.QtGui import QPixmap, QFont, QIcon, QCursor
 from PyQt5.QtCore import QSize, Qt
 
 from designer.secondary_functions import Request, Work_size_window, pprint
@@ -17,6 +17,13 @@ class Example(QWidget):
         self.initUI()
 
     def initUI(self):
+        self.cur = 0
+        # cur_img_con = QPixmap("data/img/cursor_con.png").scaled(22, 22)
+        # cur = QCursor(cur_img_con)
+        # self.setCursor(cur)
+        # cur_img = QPixmap("data/img/cursor.png").scaled(22, 22)
+        # self.cur = QCursor(cur_img)
+
         self.setWindowFlags(Qt.FramelessWindowHint)
         size_win = AD(REQUEST.get_request("size_display", tup=True))
         pprint(size_win, " Ширина и высота приложения")
@@ -122,6 +129,8 @@ class Example(QWidget):
             self.nav_button.setFont(font)
             self.nav_button.setText(text)
             self.nav_button.clicked.connect(click)
+            if self.cur:
+                self.nav_button.setCursor(self.cur)
             self.main_work.window["navigation"].append(self.nav_button)
 
     def setting_window(self):
