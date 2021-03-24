@@ -139,9 +139,20 @@ class Example(QWidget):
         pos = AD([self.size_window[0] // 3, self.size_window[1] // 8,
                  self.size_window[0] - self.size_window[0] // 2.5,
                  self.size_window[1] // 1.5])
-        color = REQUEST.get_request("color_nav", color=True)
+
+        font = QFont()
+        font.setPointSize(20)
+        self.st_text_monologue.setFont(font)
+
+        color_text = REQUEST.get_request("color_text", color=True)
+        CSS_color_text = f"color: rgb{(color_text[0], color_text[1], color_text[2])};"
+
+        color = REQUEST.get_request("color_background", color=True)
         CSS_color = f"background-color: rgb{color};"
-        self.st_text_monologue.setStyleSheet("QTextEdit{" + CSS_color + "}")  # пока не завершено
+
+        self.st_text_monologue.setStyleSheet("QTextEdit{" + CSS_color +
+                                             CSS_color_text +
+                                             "border:none;" + "}")  # пока не завершено
         self.st_text_monologue.setGeometry(pos[0], pos[1], pos[2], pos[3])
         self.st_text_monologue.setEnabled(False)
         text = open("data/text/start_monologue.txt", encoding="utf-8").readlines()
