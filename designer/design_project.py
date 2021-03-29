@@ -122,10 +122,25 @@ class Example(QWidget):
                 click = self.main_work.void
             else:
                 click = tap_list[i]
+
+            CSS_border = f"border: {REQUEST.get_request('radius_border')} " \
+                         f"solid {REQUEST.get_request('color_nav_hover_border')}; "
+            # CSS_border_color = f"border-color: rgb{REQUEST.get_request('color_nav_hover_border', color=True)}; "
+            CSS_bg_hover = f"background: rgb{REQUEST.get_request('color_nav_hover', color=True)}; "
+            print("QPushButton{" + CSS_color + " "
+                                          + CSS_color_text + "} "
+                                          + "QPushButton:hover{" +
+                                            CSS_border +
+                                            CSS_bg_hover + "}")
+
             self.nav_button = QPushButton(self)
             self.nav_button.setGeometry(pos[0], pos[1] + pos[3] * i, pos[2], pos[3])
             self.nav_button.setStyleSheet("QPushButton{" + CSS_color + " "
-                                          + CSS_color_text + "}")
+                                          + CSS_color_text + "} "
+                                          + "QPushButton:hover{" +
+                                          CSS_bg_hover +
+                                            CSS_border + "}")
+
             self.nav_button.setFont(font)
             self.nav_button.setText(text)
             self.nav_button.clicked.connect(click)
