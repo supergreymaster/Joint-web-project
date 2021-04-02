@@ -19,36 +19,50 @@ class Request:
     def get_request(self, request, tup=False, color=False):
         cur = self.base.cursor()
 
-        result = cur.execute(f"SELECT value FROM {self.table} WHERE name == '{request}'").fetchall()
+        table = self.table
+        version = 'value'
+
+        if color:
+            table = "appcolors"
+            version = cur.execute(f"SELECT value FROM constant WHERE name == 'version'").fetchall()[0][0]
+        result = cur.execute(f"SELECT {version} FROM {table} WHERE name == '{request}'").fetchall()
+
         if not result and Admin.admin:
             print(f"По запросу {request} ничего не найдено")
             return
         else:
             result = result[0][0]
             pprint(result, " Результат запроса ", request)
+
         if tup:
             result = list(map(lambda x: int(x), result.split()))
         elif color:
-            result = list(map(lambda x: int(x), result.split()))
-            result = (result[0], result[1], result[2])
+            if "#" not in result:
+                result = '#' + ''.join(map(lambda i: f"{hex(int(i))}"[2:], result.split()))
 
         return result
 
     def get_full_request(self, col_check, get_col, if_request, tup=False, color=False):
         cur = self.base.cursor()
 
-        result = cur.execute(f"SELECT {get_col} FROM {self.table} WHERE {col_check} == '{if_request}'").fetchall()[0][0]
+        table = self.table
+
+        if color:
+            table = "appcolors"
+
+        result = cur.execute(f"SELECT {get_col} FROM {table} WHERE {col_check} == '{if_request}'").fetchall()[0][0]
         if not result and Admin.admin:
             print(f"По запросу {if_request} ничего не найдено")
             return
         else:
             result = result[0][0]
             pprint(result, " Результат запроса ", if_request)
+
         if tup:
             result = list(map(lambda x: int(x), result.split()))
         elif color:
-            result = list(map(lambda x: int(x), result.split()))
-            result = (result[0], result[1], result[2])
+            if "#" not in result:
+                result = '#' + ''.join(map(lambda i: f"{hex(int(i))}"[2:], result.split()))
 
         return result
 
