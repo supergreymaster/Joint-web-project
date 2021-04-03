@@ -11,7 +11,7 @@ WIN = Work_size_window()
 AD = WIN.adaptation
 
 
-CCS_bg = "background-color: "
+CSS_bg = "background-color: "
 CSS_border = "border: "
 CSS_col = "color: "
 
@@ -42,7 +42,7 @@ class Example(QWidget):
         self.setGeometry((WIN.wight_window - size_win[0]) // 2, (WIN.height_window - size_win[1]) // 2,
                          size_win[0], size_win[1])
 
-        tmp_CSS = CCS_bg + REQUEST.get_request('background', color=True) + ";"
+        tmp_CSS = CSS_bg + REQUEST.get_request('background', color=True) + ";"
 
         self.label_main_window = QLabel(self)
         self.label_main_window.setGeometry(0, 0, size_win[0], size_win[1])
@@ -67,7 +67,7 @@ class Example(QWidget):
         self.gen_lab_head = QLabel(self)
         pos = AD([0, 0, self.size_window[0], 25])
         self.gen_lab_head.setGeometry(pos[0], pos[1], pos[2], pos[3])
-        tmp_CSS = CCS_bg + REQUEST.get_request("head", color=True) + ";"
+        tmp_CSS = CSS_bg + REQUEST.get_request("head", color=True) + ";"
         self.gen_lab_head.setStyleSheet(CSS_lab + "{" + tmp_CSS + "}")
         self.main_work.window["general"].append(self.gen_lab_head)
 
@@ -113,7 +113,7 @@ class Example(QWidget):
         self.gen_lab_nav = QLabel(self)
         pos = AD([0, 25, self.size_window[0] // 4, self.size_window[1] - 25])
         self.gen_lab_nav.setGeometry(pos[0], pos[1], pos[2], pos[3])
-        tmp_CSS = CCS_bg + REQUEST.get_request("navigation", color=True) + ";"
+        tmp_CSS = CSS_bg + REQUEST.get_request("navigation", color=True) + ";"
         self.gen_lab_nav.setStyleSheet(CSS_lab + "{" + tmp_CSS + "}")
         self.main_work.window["navigation"].append(self.gen_lab_nav)
 
@@ -122,10 +122,16 @@ class Example(QWidget):
         font = QFont()
         font.setPointSize(AD(16, font=True))
 
-        tmp_CSS = CSS_col + REQUEST.get_request("text", color=True) + "; "
+        tmp_CSS = CSS_col + REQUEST.get_request("nav_text", color=True) + "; "
         tmp1_CSS = CSS_border + REQUEST.get_request('radius_border') + " solid " \
-                    + REQUEST.get_request('nav_hover_border', color=True) + "; "
-        tmp2_CSS = CCS_bg + REQUEST.get_request('nav_hover', color=True) + "; "
+                    + REQUEST.get_request('nav_border', color=True) + "; "
+        tmp2_CSS = CSS_bg + REQUEST.get_request('navigation', color=True) + "; "
+
+        tmp_h_CSS = CSS_col + REQUEST.get_request("nav_sec_text", color=True) + "; "
+        tmp1_h_CSS = CSS_bg + REQUEST.get_request("nav_hover", color=True) + "; "
+
+        tmp_p_CSS = CSS_bg + REQUEST.get_request("nav_bg_pres", color=True) + "; "
+        tmp1_p_CSS = CSS_col + REQUEST.get_request("nav_pres_text", color=True) + "; "
 
         file = open("data/text/" + REQUEST.get_request("name_file_nav"), encoding="utf-8").readlines()
         for i in range(count):
@@ -140,7 +146,9 @@ class Example(QWidget):
 
             self.nav_button = QPushButton(self)
             self.nav_button.setGeometry(pos[0], pos[1] + pos[3] * i, pos[2], pos[3])
-            self.nav_button.setStyleSheet(CSS_but + "{" + tmp_CSS + tmp2_CSS + "}")
+            self.nav_button.setStyleSheet(CSS_but + "{" + tmp_CSS + tmp1_CSS + tmp2_CSS + "}" + " " + \
+                                          CSS_but + CSS_hov + "{" + tmp_h_CSS + tmp1_h_CSS + "}" + " " + \
+                                          CSS_but + CSS_pre + "{" + tmp_p_CSS + tmp1_p_CSS + "}")
 
             self.nav_button.setFont(font)
             self.nav_button.setText(text)
@@ -170,7 +178,7 @@ class Example(QWidget):
         self.st_text_monologue.setFont(font)
 
         tmp_CSS = CSS_col + REQUEST.get_request("text", color=True) + "; "
-        tmp1_CSS = CCS_bg + REQUEST.get_request("background", color=True) + "; "
+        tmp1_CSS = CSS_bg + REQUEST.get_request("background", color=True) + "; "
 
         self.st_text_monologue.setStyleSheet(CSS_TE + "{" + tmp_CSS + tmp1_CSS + "}")  # пока не завершено
         self.st_text_monologue.setGeometry(pos[0], pos[1], pos[2], pos[3])
