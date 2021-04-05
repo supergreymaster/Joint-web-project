@@ -1,10 +1,13 @@
 import sys
 
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QLabel, QTextEdit
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QLabel, QTextEdit, QComboBox
 from PyQt5.QtGui import QPixmap, QFont, QIcon, QCursor
 from PyQt5.QtCore import QSize, Qt
 
-from designer.secondary_functions import Request, Work_size_window, pprint
+from designer.secondary_functions import Request, Work_size_window, pprint, Language
+
+tmp = Language()
+LANGUAGE = tmp.request
 
 REQUEST = Request()
 WIN = Work_size_window()
@@ -18,6 +21,7 @@ CSS_col = "color: "
 CSS_but = "QPushButton"
 CSS_lab = "QLabel"
 CSS_TE = "QTextEdit"
+CSS_CB = "QComboBox"
 
 CSS_hov = ":hover"
 CSS_pre = ":pressed"
@@ -29,6 +33,7 @@ class Example(QWidget):
         self.initUI()
 
     def initUI(self):
+        self.CSS_dict = {}
         self.cur = 0
         # cur_img_con = QPixmap("data/img/cursor_con.png").scaled(22, 22)
         # cur = QCursor(cur_img_con)
@@ -38,7 +43,7 @@ class Example(QWidget):
 
         self.setWindowFlags(Qt.FramelessWindowHint)
         size_win = AD(REQUEST.get_request("size_display", tup=True))
-        pprint(size_win, " Ширина и высота приложения")
+        pprint(size_win, " Ширина и высота приложения|")
         self.setGeometry((WIN.wight_window - size_win[0]) // 2, (WIN.height_window - size_win[1]) // 2,
                          size_win[0], size_win[1])
 
@@ -50,11 +55,55 @@ class Example(QWidget):
 
         self.setWindowTitle(REQUEST.get_request("title_name"))
 
+        self.CSS_create()
         self.main_work = Main_work()
 
         self.general_window()
         self.navigation_window()
-        self.start_work_window()
+        # self.start_work_window()
+        self.setting_window()
+
+    def CSS_create(self):
+
+        nav_text_CSS = CSS_col + REQUEST.get_request("nav_text", color=True) + "; "
+        rad_bor_CSS = CSS_border + REQUEST.get_request('radius_border') + " solid " \
+                      + REQUEST.get_request('nav_border', color=True) + "; "
+        nav_bg_CSS = CSS_bg + REQUEST.get_request('navigation', color=True) + "; "
+
+        nav_sec_text_h_CSS = CSS_col + REQUEST.get_request("nav_sec_text", color=True) + "; "
+        nav_h_CSS = CSS_bg + REQUEST.get_request("nav_hover", color=True) + "; "
+
+        nav_bg_p_CSS = CSS_bg + REQUEST.get_request("nav_bg_pres", color=True) + "; "
+        nav_text_p_CSS = CSS_col + REQUEST.get_request("nav_pres_text", color=True) + "; "
+
+        text_CSS = CSS_col + REQUEST.get_request("text", color=True) + "; "
+        bg_CSS = CSS_bg + REQUEST.get_request("background", color=True) + "; "
+        border_CSS = CSS_border + "none; "
+
+        head_CSS = CSS_bg + REQUEST.get_request("head", color=True)
+
+        self.CSS_dict["gen_lab_head"] = CSS_lab + "{" + head_CSS + ";}"
+
+        border = CSS_but + "{" + border_CSS + "}"
+        self.CSS_dict["gen_but_head"] = border
+        self.CSS_dict["gen_but_exit"] = border
+        self.CSS_dict["gen_but_roll_up"] = border
+
+        self.CSS_dict["gen_lab_nav"] = CSS_lab + "{" + nav_bg_CSS + ";}"
+
+
+        self.CSS_dict["nav_button"] = CSS_but + "{" + nav_text_CSS + rad_bor_CSS + nav_bg_CSS + "}" + " " + \
+                                          CSS_but + CSS_hov + "{" + nav_sec_text_h_CSS + nav_h_CSS + "}" + " " + \
+                                          CSS_but + CSS_pre + "{" + nav_bg_p_CSS + nav_text_p_CSS + "}"
+
+
+
+        self.CSS_dict["st_text_monologue"] = CSS_TE + "{" + text_CSS + bg_CSS + border_CSS + "}"
+
+        self.CSS_dict["set_lab_theme"] = CSS_lab + "{" + text_CSS + ";}"
+        self.CSS_dict["set_com_box_theme"] = CSS_CB + "{" + text_CSS + nav_bg_CSS + "}"
+        self.CSS_dict["set_but_save"] = CSS_but + "{" + text_CSS + nav_bg_CSS + "}"
+
 
     def general_window(self):
         self.main_work.window["general"] = list()
@@ -67,8 +116,7 @@ class Example(QWidget):
         self.gen_lab_head = QLabel(self)
         pos = AD([0, 0, self.size_window[0], 25])
         self.gen_lab_head.setGeometry(pos[0], pos[1], pos[2], pos[3])
-        tmp_CSS = CSS_bg + REQUEST.get_request("head", color=True) + ";"
-        self.gen_lab_head.setStyleSheet(CSS_lab + "{" + tmp_CSS + "}")
+        self.gen_lab_head.setStyleSheet(self.CSS_dict["gen_lab_head"])
         self.main_work.window["general"].append(self.gen_lab_head)
 
         self.gen_but_setting = QPushButton(self)
@@ -77,16 +125,14 @@ class Example(QWidget):
         self.gen_but_setting.setIcon(QIcon("data/img/setting_button.png"))
         size = AD([15, 15])
         self.gen_but_setting.setIconSize(QSize(size[0], size[1]))
-        tmp_CSS = CSS_border + "none;"
-        self.gen_but_setting.setStyleSheet(CSS_but + "{" + tmp_CSS + "}")
+        self.gen_but_setting.setStyleSheet(self.CSS_dict["gen_but_head"])
         self.gen_but_setting.clicked.connect(self.main_work.setting)
         self.main_work.window["general"].append(self.gen_but_setting)
 
         self.gen_but_exit = QPushButton(self)
         pos = AD([int(self.size_window[0] * 0.975), 8, 10, 10])
         self.gen_but_exit.setGeometry(pos[0], pos[1], pos[2], pos[3])
-        tmp_CSS = CSS_border + "none;"
-        self.gen_but_exit.setStyleSheet(CSS_but + "{" + tmp_CSS + "}")
+        self.gen_but_exit.setStyleSheet(self.CSS_dict["gen_but_exit"])
         self.gen_but_exit.setIcon(QIcon("data/img/exit_button.png"))
         size = AD([10, 10])
         self.gen_but_exit.setIconSize(QSize(size[0], size[1]))
@@ -96,8 +142,7 @@ class Example(QWidget):
         self.gen_but_roll_up = QPushButton(self)
         pos = AD([int(self.size_window[0] * 0.95), 8, 10, 10])
         self.gen_but_roll_up.setGeometry(pos[0], pos[1], pos[2], pos[3])
-        tmp_CSS = CSS_border + "none;"
-        self.gen_but_roll_up.setStyleSheet(CSS_but + "{" + tmp_CSS + "}")
+        self.gen_but_roll_up.setStyleSheet(self.CSS_dict["gen_but_roll_up"])
         self.gen_but_roll_up.setIcon(QIcon("data/img/roll_up_button.png"))
         size = AD([10, 10])
         self.gen_but_roll_up.setIconSize(QSize(size[0], size[1]))
@@ -107,14 +152,13 @@ class Example(QWidget):
     def navigation_window(self):
         self.main_work.window["navigation"] = list()
 
-        tap_list = [self.main_work.work1, self.main_work.work2, self.main_work.work3]
+        tap_list = [self.main_work.work1, self.main_work.work2, self.main_work.work3, self.main_work.setting]
 
 
         self.gen_lab_nav = QLabel(self)
         pos = AD([0, 25, self.size_window[0] // 4, self.size_window[1] - 25])
         self.gen_lab_nav.setGeometry(pos[0], pos[1], pos[2], pos[3])
-        tmp_CSS = CSS_bg + REQUEST.get_request("navigation", color=True) + ";"
-        self.gen_lab_nav.setStyleSheet(CSS_lab + "{" + tmp_CSS + "}")
+        self.gen_lab_nav.setStyleSheet(self.CSS_dict["gen_lab_nav"])
         self.main_work.window["navigation"].append(self.gen_lab_nav)
 
         count = int(REQUEST.get_request("count_nav_but"))
@@ -122,18 +166,7 @@ class Example(QWidget):
         font = QFont()
         font.setPointSize(AD(16, font=True))
 
-        tmp_CSS = CSS_col + REQUEST.get_request("nav_text", color=True) + "; "
-        tmp1_CSS = CSS_border + REQUEST.get_request('radius_border') + " solid " \
-                    + REQUEST.get_request('nav_border', color=True) + "; "
-        tmp2_CSS = CSS_bg + REQUEST.get_request('navigation', color=True) + "; "
-
-        tmp_h_CSS = CSS_col + REQUEST.get_request("nav_sec_text", color=True) + "; "
-        tmp1_h_CSS = CSS_bg + REQUEST.get_request("nav_hover", color=True) + "; "
-
-        tmp_p_CSS = CSS_bg + REQUEST.get_request("nav_bg_pres", color=True) + "; "
-        tmp1_p_CSS = CSS_col + REQUEST.get_request("nav_pres_text", color=True) + "; "
-
-        file = open("data/text/" + REQUEST.get_request("name_file_nav"), encoding="utf-8").readlines()
+        file = [LANGUAGE("nav_but_1"), LANGUAGE("nav_but_2"), LANGUAGE("nav_but_3"), LANGUAGE("nav_but_4")]
         for i in range(count):
             if len(file) < i + 1:
                 text = ""
@@ -146,9 +179,8 @@ class Example(QWidget):
 
             self.nav_button = QPushButton(self)
             self.nav_button.setGeometry(pos[0], pos[1] + pos[3] * i, pos[2], pos[3])
-            self.nav_button.setStyleSheet(CSS_but + "{" + tmp_CSS + tmp1_CSS + tmp2_CSS + "}" + " " + \
-                                          CSS_but + CSS_hov + "{" + tmp_h_CSS + tmp1_h_CSS + "}" + " " + \
-                                          CSS_but + CSS_pre + "{" + tmp_p_CSS + tmp1_p_CSS + "}")
+            # print(type(self.CSS_dict["nav_button"]) ,self.CSS_dict["nav_button"])
+            self.nav_button.setStyleSheet(self.CSS_dict["nav_button"])
 
             self.nav_button.setFont(font)
             self.nav_button.setText(text)
@@ -160,6 +192,38 @@ class Example(QWidget):
     def setting_window(self):
         self.main_work.window["setting"] = list()
         self.main_work.window["second"] = list()
+
+        self.set_lab_theme = QLabel(self)
+        pos = AD([self.size_window[0] // 4 + self.size_window[0] // 10,
+                  25 + self.size_window[1] // 10, 100, 50])
+        self.set_lab_theme.setGeometry(pos[0], pos[1], pos[2], pos[3])
+        # print(type(self.CSS_dict["set_lab_theme"]), self.CSS_dict["set_lab_theme"])
+        self.set_lab_theme.setStyleSheet(self.CSS_dict["set_lab_theme"])
+        self.set_lab_theme.setText("Тема")
+        font = QFont()
+        font.setPointSize(AD(20, font=True))
+        self.set_lab_theme.setFont(font)
+
+        self.set_com_box_theme = QComboBox(self)
+        pos = AD([self.size_window[0] // 4 + self.size_window[0] // 12,
+                  25 + self.size_window[1] // 10 * 2, 100, 25])
+        self.set_com_box_theme.setGeometry(pos[0], pos[1], pos[2], pos[3])
+        # self.set_com_box_theme.
+        version = len(REQUEST.get_full_request("name", "*", "text", table="appcolors")[0]) - 3
+        for i in range(1, version + 1):
+            self.set_com_box_theme.addItem(f"version{i}")
+
+        self.set_com_box_theme.setStyleSheet(self.CSS_dict["set_com_box_theme"])
+
+
+        self.set_but_save = QPushButton(self)
+        pos = AD([self.size_window[0] // 4 + self.size_window[0] // 12,
+                  25 + self.size_window[1] // 10 * 9, 100, 25])
+        self.set_but_save.setGeometry(pos[0], pos[1], pos[2], pos[3])
+
+        self.set_but_save.setStyleSheet(self.CSS_dict["set_but_save"])
+        self.set_but_save.setText(LANGUAGE("but_save"))
+
 
     def roll_up(self):
         self.showMinimized()
@@ -177,10 +241,7 @@ class Example(QWidget):
         font.setPointSize(20)
         self.st_text_monologue.setFont(font)
 
-        tmp_CSS = CSS_col + REQUEST.get_request("text", color=True) + "; "
-        tmp1_CSS = CSS_bg + REQUEST.get_request("background", color=True) + "; "
-
-        self.st_text_monologue.setStyleSheet(CSS_TE + "{" + tmp_CSS + tmp1_CSS + "}")  # пока не завершено
+        self.st_text_monologue.setStyleSheet(self.CSS_dict["st_text_monologue"])  # пока не завершено
         self.st_text_monologue.setGeometry(pos[0], pos[1], pos[2], pos[3])
         self.st_text_monologue.setEnabled(False)
         text = open("data/text/start_monologue.txt", encoding="utf-8").readlines()

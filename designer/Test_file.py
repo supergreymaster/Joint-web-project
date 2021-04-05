@@ -1,7 +1,6 @@
-rgb = "255 128 64"
+import sqlite3
 
-# text = '#' + ''.join([f"{int(i):02x}" for i in rgb.split(',')])
-# text = '#' + ''.join(map(lambda i: f"{int(i):02x}", rgb.split()))
-text = '#' + ''.join(map(lambda i: f"{hex(int(i))}"[2:], rgb.split()))
-
-print(text)
+base = sqlite3.connect("data/SQL/Constant.db")
+cur = base.cursor()
+result = cur.execute(f"SELECT * FROM appcolors").fetchall()
+print(result)
