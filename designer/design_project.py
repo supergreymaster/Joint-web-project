@@ -30,6 +30,8 @@ CSS_pre = ":pressed"
 class Example(QWidget):
     def __init__(self):
         super().__init__()
+        self.main_work = Main_work()
+        self.main_work.window["save"] = self.initUI
         self.initUI()
 
     def initUI(self):
@@ -42,8 +44,9 @@ class Example(QWidget):
         # self.cur = QCursor(cur_img)
 
         self.setWindowFlags(Qt.FramelessWindowHint)
+
         size_win = AD(REQUEST.get_request("size_display", tup=True))
-        pprint(size_win, " Ширина и высота приложения|")
+        pprint(size_win, " Ширина и высота приложения")
         self.setGeometry((WIN.wight_window - size_win[0]) // 2, (WIN.height_window - size_win[1]) // 2,
                          size_win[0], size_win[1])
 
@@ -56,7 +59,6 @@ class Example(QWidget):
         self.setWindowTitle(REQUEST.get_request("title_name"))
 
         self.CSS_create()
-        self.main_work = Main_work()
 
         self.general_window()
         self.navigation_window()
@@ -103,7 +105,6 @@ class Example(QWidget):
         self.CSS_dict["set_lab_theme"] = CSS_lab + "{" + text_CSS + ";}"
         self.CSS_dict["set_com_box_theme"] = CSS_CB + "{" + text_CSS + nav_bg_CSS + "}"
         self.CSS_dict["set_but_save"] = CSS_but + "{" + text_CSS + nav_bg_CSS + "}"
-
 
     def general_window(self):
         self.main_work.window["general"] = list()
@@ -203,6 +204,8 @@ class Example(QWidget):
         font = QFont()
         font.setPointSize(AD(20, font=True))
         self.set_lab_theme.setFont(font)
+        self.main_work.window["setting"].append(self.set_lab_theme)
+        self.main_work.window["second"].append(self.set_lab_theme)
 
         self.set_com_box_theme = QComboBox(self)
         pos = AD([self.size_window[0] // 4 + self.size_window[0] // 12,
@@ -214,6 +217,8 @@ class Example(QWidget):
             self.set_com_box_theme.addItem(f"version{i}")
 
         self.set_com_box_theme.setStyleSheet(self.CSS_dict["set_com_box_theme"])
+        self.main_work.window["setting"].append(self.set_com_box_theme)
+        self.main_work.window["second"].append(self.set_com_box_theme)
 
 
         self.set_but_save = QPushButton(self)
@@ -223,6 +228,19 @@ class Example(QWidget):
 
         self.set_but_save.setStyleSheet(self.CSS_dict["set_but_save"])
         self.set_but_save.setText(LANGUAGE("but_save"))
+        self.set_but_save.clicked.connect(self.main_work.save)
+        self.main_work.window["setting"].append(self.set_but_save)
+        self.main_work.window["second"].append(self.set_but_save)
+
+        self.set_but_cha_lan = QPushButton(self)
+        pos = AD([self.size_window[0] // 4 + self.size_window[0] // 12,
+                  25 + self.size_window[1] // 10 * 9, 100, 25])
+        self.set_but_cha_lan.setGeometry(pos[0], pos[1], pos[2], pos[3])
+
+        self.set_but_cha_lan.setText(LANGUAGE("but_save"))
+        self.set_but_cha_lan.clicked.connect(self.main_work.change_lan)
+        self.main_work.window["setting"].append(self.set_but_cha_lan)
+        self.main_work.window["second"].append(self.set_but_cha_lan)
 
 
     def roll_up(self):
@@ -265,11 +283,21 @@ class Main_work:
     def work3(self):
         print("3")
 
+    def save(self):
+        pprint("Использовалась команда ", "сохранение")
+        self.window["save"]()
+
+    def change_lan(self):
+        pprint("Использовалась команда ", "изменение языка")
+        all_lang = REQUEST.get_full_request("name", "*", "language")
+        print(all_lang)
+
+
     def void(self):
         pass
 
     def setting(self):
-        pprint("Зашёл в setting")
+        pprint("Использовалась команда ", "войти в ", "настройки")
 
 
 def except_hook(cls, exception, traceback):  # если произойдет ошибка то Pyqt5 не будет замалчивать её
