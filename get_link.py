@@ -4,7 +4,7 @@ import requests
 API_KEY = "40d1649f-0493-4b70-98ba-98533de7710b"
 
 
-def get_link(filePath):
+def get_link(filePath):  # также в формате строки: "test.png"
     try:
         searchUrl = 'https://yandex.ru/images/search'
         files = {'upfile': ('blob', open(filePath, 'rb'), 'image/jpeg')}

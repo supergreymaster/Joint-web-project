@@ -28,7 +28,7 @@ def request_analyze(vision_url, iam_token, folder_id, image_data):
     return response.text
 
 
-def get_text(image_path):
+def get_text(image_path):  # вызывать ее, в аргументы путь в формате строки. Например 'test.png'
     folder_id = 'b1gda6o00s0iueac3b1c'
     oauth_token = 'AQAAAAAVdxsdAATuwSCvXz4_A0kLkDik2MpRZ1I'
     image_path = image_path
