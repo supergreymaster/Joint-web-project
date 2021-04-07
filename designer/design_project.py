@@ -31,7 +31,7 @@ class Example(QWidget):
     def __init__(self):
         super().__init__()
         self.main_work = Main_work()
-        self.main_work.window["save"] = self.initUI
+        self.main_work.window["save"] = list()
         self.initUI()
 
     def initUI(self):
@@ -98,13 +98,13 @@ class Example(QWidget):
                                           CSS_but + CSS_hov + "{" + nav_sec_text_h_CSS + nav_h_CSS + "}" + " " + \
                                           CSS_but + CSS_pre + "{" + nav_bg_p_CSS + nav_text_p_CSS + "}"
 
-
-
         self.CSS_dict["st_text_monologue"] = CSS_TE + "{" + text_CSS + bg_CSS + border_CSS + "}"
 
-        self.CSS_dict["set_lab_theme"] = CSS_lab + "{" + text_CSS + ";}"
-        self.CSS_dict["set_com_box_theme"] = CSS_CB + "{" + text_CSS + nav_bg_CSS + "}"
-        self.CSS_dict["set_but_save"] = CSS_but + "{" + text_CSS + nav_bg_CSS + "}"
+        self.CSS_dict["set_lab_theme"] = CSS_lab + "{" + text_CSS + "}"
+        self.CSS_dict["set_com_box_theme"] = CSS_CB + "{" + nav_text_CSS + nav_bg_CSS + "}"
+        self.CSS_dict["set_but_save"] = CSS_but + "{" + nav_text_CSS + nav_bg_CSS + "}"
+        self.CSS_dict["set_lab_cha_lan"] = CSS_lab + "{" + text_CSS + "}"
+        self.CSS_dict["set_but_cha_lan"] = CSS_but + CSS_hov + "{" + rad_bor_CSS + "}"
 
     def general_window(self):
         self.main_work.window["general"] = list()
@@ -220,28 +220,42 @@ class Example(QWidget):
         self.main_work.window["setting"].append(self.set_com_box_theme)
         self.main_work.window["second"].append(self.set_com_box_theme)
 
-
         self.set_but_save = QPushButton(self)
         pos = AD([self.size_window[0] // 4 + self.size_window[0] // 12,
-                  25 + self.size_window[1] // 10 * 9, 100, 25])
+                  25 + self.size_window[1] // 3.5, 100, 25])
         self.set_but_save.setGeometry(pos[0], pos[1], pos[2], pos[3])
 
         self.set_but_save.setStyleSheet(self.CSS_dict["set_but_save"])
         self.set_but_save.setText(LANGUAGE("but_save"))
-        self.set_but_save.clicked.connect(self.main_work.save)
+        self.set_but_save.clicked.connect(self.save)
         self.main_work.window["setting"].append(self.set_but_save)
         self.main_work.window["second"].append(self.set_but_save)
 
-        self.set_but_cha_lan = QPushButton(self)
-        pos = AD([self.size_window[0] // 4 + self.size_window[0] // 12,
-                  25 + self.size_window[1] // 10 * 9, 100, 25])
-        self.set_but_cha_lan.setGeometry(pos[0], pos[1], pos[2], pos[3])
+        self.set_lab_cha_lan = QLabel(self)
+        pos = AD([self.size_window[0] // 4 + self.size_window[0] // 2.8,
+                  25 + self.size_window[1] // 7, 150, 35])
+        self.set_lab_cha_lan.setGeometry(pos[0], pos[1], pos[2], pos[3])
+        self.set_lab_cha_lan.setText(LANGUAGE("language_name"))
+        self.set_lab_cha_lan.setStyleSheet(self.CSS_dict["set_lab_cha_lan"])
+        self.set_lab_cha_lan.setFont(font)
+        self.main_work.window["setting"].append(self.set_lab_cha_lan)
+        self.main_work.window["second"].append(self.set_lab_cha_lan)
 
-        self.set_but_cha_lan.setText(LANGUAGE("but_save"))
+        self.set_but_cha_lan = QPushButton(self)
+        pos = AD([self.size_window[0] // 4 + self.size_window[0] // 3,
+                  25 + self.size_window[1] // 5, 160, 110])
+        self.set_but_cha_lan.setGeometry(pos[0], pos[1], pos[2], pos[3])
+        self.set_but_cha_lan.setIcon(QIcon("data/img/" + LANGUAGE("way_image")))
+        size = AD([150, 100])
+        self.set_but_cha_lan.setIconSize(QSize(size[0], size[1]))
+        self.set_but_cha_lan.setStyleSheet(self.CSS_dict["set_but_cha_lan"])
         self.set_but_cha_lan.clicked.connect(self.main_work.change_lan)
         self.main_work.window["setting"].append(self.set_but_cha_lan)
         self.main_work.window["second"].append(self.set_but_cha_lan)
 
+    def save(self):
+        # print(self.set_com_box_theme.currentText())
+        self.main_work.save(self.set_com_box_theme.currentText())
 
     def roll_up(self):
         self.showMinimized()
@@ -283,15 +297,29 @@ class Main_work:
     def work3(self):
         print("3")
 
-    def save(self):
+    def save(self, version):
         pprint("Использовалась команда ", "сохранение")
-        self.window["save"]()
+        REQUEST.change_base("version", version)
 
     def change_lan(self):
         pprint("Использовалась команда ", "изменение языка")
-        all_lang = REQUEST.get_full_request("name", "*", "language")
-        print(all_lang)
-
+        all_lang = REQUEST.get_full_request("name", "*", "language", table="language")[0][2:]
+        now_lan = REQUEST.get_request("language")
+        last_lan = ""
+        war = False
+        for i in all_lang:
+            if i == now_lan:
+                war = True
+                continue
+            if war:
+                REQUEST.change_base("language", i)
+                last_lan = i
+                war = False
+                break
+        if war:
+            REQUEST.change_base("language", all_lang[0])
+            last_lan = all_lang[0]
+        pprint("Изменён язык ", "с ", now_lan, " на ", last_lan)
 
     def void(self):
         pass

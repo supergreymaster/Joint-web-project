@@ -77,6 +77,13 @@ class Request:
 
         return result
 
+    def change_base(self, name, value):
+        cur = self.base.cursor()
+
+        cur.execute(f"""UPDATE {self.table} SET value == '{value}' WHERE name == '{name}'""")
+        self.base.commit()
+        pprint("Изменена база данных ", name, " ", value)
+
 
 class Work_size_window:
     def __init__(self):
