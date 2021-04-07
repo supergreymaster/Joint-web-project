@@ -63,7 +63,8 @@ class Example(QWidget):
         self.general_window()
         self.navigation_window()
         # self.start_work_window()
-        self.setting_window()
+        # self.setting_window()
+        self.window_2()
 
     def CSS_create(self):
 
@@ -105,6 +106,7 @@ class Example(QWidget):
         self.CSS_dict["set_but_save"] = CSS_but + "{" + nav_text_CSS + nav_bg_CSS + "}"
         self.CSS_dict["set_lab_cha_lan"] = CSS_lab + "{" + text_CSS + "}"
         self.CSS_dict["set_but_cha_lan"] = CSS_but + CSS_hov + "{" + rad_bor_CSS + "}"
+        self.CSS_dict["win_2_but_find"] = CSS_but + "{" + nav_text_CSS + nav_bg_CSS + "}"
 
     def general_window(self):
         self.main_work.window["general"] = list()
@@ -149,6 +151,22 @@ class Example(QWidget):
         self.gen_but_roll_up.setIconSize(QSize(size[0], size[1]))
         self.gen_but_roll_up.clicked.connect(self.roll_up)
         self.main_work.window["general"].append(self.gen_but_roll_up)
+
+    def window_2(self):
+        self.main_work.window["window_2"] = list()
+        self.main_work.window["second"] = list()
+
+        self.win_2_but_find = QPushButton(self)
+        pos = AD([self.size_window[0] // 4 + self.size_window[0] // 12,
+                  25 + self.size_window[1] // 3.5, 100, 25])
+        self.win_2_but_find.setGeometry(pos[0], pos[1], pos[2], pos[3])
+
+        self.win_2_but_find.setStyleSheet(self.CSS_dict["win_2_but_find"])
+        self.win_2_but_find.setText(LANGUAGE("find_file"))
+        # self.win_2_but_find.clicked.connect(self.save)
+        self.main_work.window["window_2"].append(self.win_2_but_find)
+        self.main_work.window["second"].append(self.win_2_but_find)
+
 
     def navigation_window(self):
         self.main_work.window["navigation"] = list()
