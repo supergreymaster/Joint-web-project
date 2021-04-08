@@ -1,6 +1,6 @@
 import sys
 
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QLabel, QTextEdit, QComboBox
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QLabel, QTextEdit, QComboBox, QFileDialog
 from PyQt5.QtGui import QPixmap, QFont, QIcon, QCursor
 from PyQt5.QtCore import QSize, Qt
 
@@ -46,7 +46,7 @@ class Example(QWidget):
         self.setWindowFlags(Qt.FramelessWindowHint)
 
         size_win = AD(REQUEST.get_request("size_display", tup=True))
-        pprint(size_win, " Ширина и высота приложения")
+        pprint(size_win, " Ширина и высота приложения'")
         self.setGeometry((WIN.wight_window - size_win[0]) // 2, (WIN.height_window - size_win[1]) // 2,
                          size_win[0], size_win[1])
 
@@ -158,14 +158,28 @@ class Example(QWidget):
 
         self.win_2_but_find = QPushButton(self)
         pos = AD([self.size_window[0] // 4 + self.size_window[0] // 12,
-                  25 + self.size_window[1] // 3.5, 100, 25])
+                  25 + self.size_window[1] // 1.2, 100, 25])
         self.win_2_but_find.setGeometry(pos[0], pos[1], pos[2], pos[3])
-
+        self.win_2_but_find.clicked.connect(self.choose_file)
         self.win_2_but_find.setStyleSheet(self.CSS_dict["win_2_but_find"])
         self.win_2_but_find.setText(LANGUAGE("find_file"))
         # self.win_2_but_find.clicked.connect(self.save)
         self.main_work.window["window_2"].append(self.win_2_but_find)
         self.main_work.window["second"].append(self.win_2_but_find)
+
+        self.win_2_tex_ret = QTextEdit(self)
+        pos = AD([self.size_window[0] // 4 + self.size_window[0] // 12,
+                  25 + self.size_window[1] // 12, 100, 25])
+        self.win_2_tex_ret.setGeometry(pos[0], pos[1], pos[2], pos[3])
+        self.win_2_tex_ret.append()
+
+
+    def choose_file(self):
+        fname = QFileDialog.getOpenFileName(
+            self, 'Выбрать картинку', '',
+            'Картинка (*.jpg);;Картинка (*.png);;Картинка (*.jpg);;Все файлы (*)')[0]
+        self.main_work.window["fname"] = fname
+        pprint("Вставленна фотография' ", fname)
 
 
     def navigation_window(self):
@@ -316,11 +330,11 @@ class Main_work:
         print("3")
 
     def save(self, version):
-        pprint("Использовалась команда ", "сохранение")
+        pprint("Использовалась команда' ", "сохранение")
         REQUEST.change_base("version", version)
 
     def change_lan(self):
-        pprint("Использовалась команда ", "изменение языка")
+        pprint("Использовалась команда' ", "изменение языка")
         all_lang = REQUEST.get_full_request("name", "*", "language", table="language")[0][2:]
         now_lan = REQUEST.get_request("language")
         last_lan = ""
@@ -337,13 +351,13 @@ class Main_work:
         if war:
             REQUEST.change_base("language", all_lang[0])
             last_lan = all_lang[0]
-        pprint("Изменён язык ", "с ", now_lan, " на ", last_lan)
+        pprint("Изменён язык' ", "с ", now_lan, " на ", last_lan)
 
     def void(self):
         pass
 
     def setting(self):
-        pprint("Использовалась команда ", "войти в ", "настройки")
+        pprint("Использовалась команда' ", "войти в ", "настройки")
 
 
 def except_hook(cls, exception, traceback):  # если произойдет ошибка то Pyqt5 не будет замалчивать её

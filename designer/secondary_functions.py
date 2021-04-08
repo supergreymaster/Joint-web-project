@@ -33,7 +33,7 @@ class Request:
             return
         else:
             result = result[0][0]
-            pprint(result, " Результат запроса ", request)
+            pprint(result, " Результат запроса' ", request)
 
         if tup:
             result = list(map(lambda x: int(x), result.split()))
@@ -59,7 +59,7 @@ class Request:
             result = cur.execute(f"SELECT {get_col} FROM {table} WHERE {col_check} == '{if_request}'").fetchall()
 
         if all:
-            pprint(result, " Результат полного запроса ", if_request)
+            pprint(result, " Результат полного запроса' ", if_request)
             return result
 
         if not result and Admin.admin:
@@ -67,7 +67,7 @@ class Request:
             return
         else:
             result = result[0][0]
-            pprint(result, " Результат полного запроса ", if_request)
+            pprint(result, " Результат полного запроса' ", if_request)
 
         if tup:
             result = list(map(lambda x: int(x), result.split()))
@@ -82,7 +82,7 @@ class Request:
 
         cur.execute(f"""UPDATE {self.table} SET value == '{value}' WHERE name == '{name}'""")
         self.base.commit()
-        pprint("Изменена база данных ", name, " ", value)
+        pprint("Изменена база данных' ", name, " ", value)
 
 
 class Work_size_window:
@@ -94,20 +94,19 @@ class Work_size_window:
         else:
             self.wight_window = 1920
             self.height_window = 1080
-        pprint(self.platform, " Операционая система")
-        pprint("width=", self.wight_window, " Разрешение экрана")
-        pprint("height=", self.height_window, " Разрешение экрана")
+        pprint(self.platform, " Операционая система'")
+        pprint("width=", self.wight_window, " Разрешение экрана'")
+        pprint("height=", self.height_window, " Разрешение экрана'")
 
         self.coef_x = self.wight_window / 1920
         self.coef_y = self.height_window / 1080
         self.coef_font = (self.coef_x / 2 + self.coef_y) / 1.5
         # self.coef_x = 1
         # self.coef_y = 1
-        pprint(self.coef_x, " ", self.coef_y, " Коэфиценты")
+        pprint(self.coef_x, " ", self.coef_y, " Коэфиценты'")
 
     def get_w_h(self):
         return self.wight_window, self.height_window
-
 
     def change_size_window(self, size_x, size_y):
         self.wight_window = size_x
@@ -143,7 +142,7 @@ class Language:
         if not result:
             print("Пустой запрос язык", rec)
             return
-        pprint(result[0][0], " Результат запроса языка ", rec)
+        pprint(result[0][0], " Результат запроса языка' ", rec)
         return result[0][0]
 
 
