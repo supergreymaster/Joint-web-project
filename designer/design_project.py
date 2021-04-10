@@ -112,23 +112,32 @@ class Example(QWidget):
         but = CSS_but + "{" + nav_text_CSS + rad_bor_CSS + nav_bg_CSS + "}" + " " + \
                                           CSS_but + CSS_hov + "{" + nav_sec_text_h_CSS + nav_h_CSS + "}" + " " + \
                                           CSS_but + CSS_pre + "{" + nav_bg_p_CSS + nav_text_p_CSS + "}"
+
+        text = CSS_TE + "{" + nav_text_CSS + nav_bg_CSS + "}"
+
+        lab = CSS_lab + "{" + text_CSS + "}"
+
+        com_box = CSS_CB + "{" + nav_text_CSS + nav_bg_CSS + rad_bor_CSS + "}"
+
         self.CSS_dict["nav_button"] = but
 
         self.CSS_dict["st_text_monologue"] = CSS_TE + "{" + text_CSS + bg_CSS + border_CSS + "}"
 
-        self.CSS_dict["set_lab_theme"] = CSS_lab + "{" + text_CSS + "}"
-        self.CSS_dict["set_com_box_theme"] = CSS_CB + "{" + nav_text_CSS + nav_bg_CSS + "}"
-        self.CSS_dict["set_but_save"] = CSS_but + "{" + nav_text_CSS + nav_bg_CSS + "}"
-        self.CSS_dict["set_lab_cha_lan"] = CSS_lab + "{" + text_CSS + "}"
-        self.CSS_dict["set_but_cha_lan"] = CSS_but + CSS_hov + "{" + rad_bor_CSS + "}"
-        self.CSS_dict["win_2_but_find"] = CSS_but + "{" + nav_text_CSS + nav_bg_CSS + "}"
-        self.CSS_dict["win_2_tex_ret"] = CSS_TE + "{" + nav_text_CSS + nav_bg_CSS + "}"
-        self.CSS_dict["win_2_but_txt"] = CSS_but + "{" + nav_text_CSS + nav_bg_CSS + "}"
-        self.CSS_dict["win_2_but_docx"] = CSS_but + "{" + nav_text_CSS + nav_bg_CSS + "}"
-        self.CSS_dict["win_2_but_mp3"] = CSS_but + "{" + nav_text_CSS + nav_bg_CSS + "}"
-        self.CSS_dict["win_3_scr"] = CSS_TE + "{" + nav_text_CSS + nav_bg_CSS + "}"
-        self.CSS_dict["win_3_lan1"] = CSS_lab + "{" + text_CSS + "}"
-        self.CSS_dict["win_3_com_box_lan"] = CSS_CB + "{" + nav_text_CSS + nav_bg_CSS + "}"
+        self.CSS_dict["set_lab_theme"] = lab
+        self.CSS_dict["set_com_box_theme"] = com_box
+        self.CSS_dict["set_but_save"] = but
+        self.CSS_dict["set_lab_cha_lan"] = lab
+        self.CSS_dict["set_but_cha_lan"] = but
+        self.CSS_dict["win_2_but_find"] = but
+        self.CSS_dict["win_2_tex_ret"] = text
+        self.CSS_dict["win_2_but_txt"] = but
+        self.CSS_dict["win_2_but_docx"] = but
+        self.CSS_dict["win_2_but_mp3"] = but
+        self.CSS_dict["win_3_scr"] = text
+        self.CSS_dict["win_3_lan1"] = lab
+        self.CSS_dict["win_3_com_box_lan"] = com_box
+        self.CSS_dict["win_3_but_voice"] = but
+        self.CSS_dict["win_3_but_copy"] = but
 
     def general_window(self):
         self.main_work.window["general"] = list()
@@ -267,20 +276,21 @@ class Example(QWidget):
         self.main_work.window["second"].append(self.win_3_scr_2)
 
         self.win_3_lan1 = QLabel(self)
-        pos = AD([self.size_window[0] // 4 + self.size_window[0] // 10,
-                  25 + self.size_window[1] // 20,
+        pos = AD([self.size_window[0] // 4 + self.size_window[0] // 3.1,
+                  25 + self.size_window[1] // 50,
                   self.size_window[0] // 5,
                   self.size_window[1] // 10])
         self.win_3_lan1.setGeometry(pos[0], pos[1], pos[2], pos[3])
         self.win_3_lan1.setStyleSheet(self.CSS_dict["win_3_lan1"])
-        # self.win_3_lan1.setText(LANGUAGE_VALUE())
+        # self.win_3_lan1.setText("Привет")
+        self.win_3_lan1.setText(LANGUAGE("translate"))
         self.win_3_lan1.setFont(self.font_lab)
         self.main_work.window["window_3"].append(self.win_3_lan1)
         self.main_work.window["second"].append(self.win_3_lan1)
 
 
         self.win_3_com_box_lan1 = QComboBox(self)
-        pos = AD([self.size_window[0] // 4 + self.size_window[0] // 4,
+        pos = AD([self.size_window[0] // 4 + self.size_window[0] // 19,
                   25 + self.size_window[1] // 6.3,
                   self.size_window[0] // 10,
                   self.size_window[1] // 24])
@@ -314,18 +324,53 @@ class Example(QWidget):
         self.main_work.window["window_3"].append(self.win_3_com_box_lan2)
         self.main_work.window["second"].append(self.win_3_com_box_lan2)
 
-        # self.win_2_but_docx = QPushButton(self)
-        # pos = AD([self.size_window[0] // 4 + self.size_window[0] // 2.5,
-        #           25 + self.size_window[1] // 1.2,
-        #           self.size_window[0] // 8.33,
-        #           self.size_window[1] // 20])
-        # self.win_2_but_docx.setGeometry(pos[0], pos[1], pos[2], pos[3])
-        # self.win_2_but_docx.clicked.connect(self.main_work.transformation_on_docx)
-        # self.win_2_but_docx.setStyleSheet(self.CSS_dict["win_2_but_docx"])
-        # self.win_2_but_docx.setText(LANGUAGE("con_docx"))
-        # # self.win_2_but_find.clicked.connect(self.save)
-        # self.main_work.window["window_3"].append(self.win_2_but_docx)
-        # self.main_work.window["second"].append(self.win_2_but_docx)
+        self.win_3_but_voice1 = QPushButton(self)
+        pos = AD([self.size_window[0] // 4 + self.size_window[0] // 2,
+                  25 + self.size_window[1] // 6.3,
+                  self.size_window[0] // 10,
+                  self.size_window[1] // 24])
+        self.win_3_but_voice1.setGeometry(pos[0], pos[1], pos[2], pos[3])
+        self.win_3_but_voice1.clicked.connect(self.main_work.transformation_on_docx)
+        self.win_3_but_voice1.setStyleSheet(self.CSS_dict["win_3_but_voice"])
+        self.win_3_but_voice1.setText(LANGUAGE("voice"))
+        self.main_work.window["window_3"].append(self.win_3_but_voice1)
+        self.main_work.window["second"].append(self.win_3_but_voice1)
+
+        self.win_3_but_voice2 = QPushButton(self)
+        pos = AD([self.size_window[0] // 4 + self.size_window[0] // 6.5,
+                  25 + self.size_window[1] // 6.3,
+                  self.size_window[0] // 10,
+                  self.size_window[1] // 24])
+        self.win_3_but_voice2.setGeometry(pos[0], pos[1], pos[2], pos[3])
+        self.win_3_but_voice2.clicked.connect(self.main_work.transformation_on_docx)
+        self.win_3_but_voice2.setStyleSheet(self.CSS_dict["win_3_but_voice"])
+        self.win_3_but_voice2.setText(LANGUAGE("voice"))
+        self.main_work.window["window_3"].append(self.win_3_but_voice2)
+        self.main_work.window["second"].append(self.win_3_but_voice2)
+
+        self.win_3_but_copy1 = QPushButton(self)
+        pos = AD([self.size_window[0] // 4 + self.size_window[0] // 1.6666,
+                  25 + self.size_window[1] // 6.3,
+                  self.size_window[0] // 10,
+                  self.size_window[1] // 24])
+        self.win_3_but_copy1.setGeometry(pos[0], pos[1], pos[2], pos[3])
+        # self.win_3_but_copy1.clicked.connect(self.main_work.transformation_on_docx)
+        self.win_3_but_copy1.setStyleSheet(self.CSS_dict["win_3_but_copy"])
+        self.win_3_but_copy1.setText(LANGUAGE("copy"))
+        self.main_work.window["window_3"].append(self.win_3_but_copy1)
+        self.main_work.window["second"].append(self.win_3_but_copy1)
+
+        self.win_3_but_copy2 = QPushButton(self)
+        pos = AD([self.size_window[0] // 4 + self.size_window[0] // 3.95,
+                  25 + self.size_window[1] // 6.3,
+                  self.size_window[0] // 10,
+                  self.size_window[1] // 24])
+        self.win_3_but_copy2.setGeometry(pos[0], pos[1], pos[2], pos[3])
+        # self.win_3_but_copy1.clicked.connect(self.main_work.transformation_on_docx)
+        self.win_3_but_copy2.setStyleSheet(self.CSS_dict["win_3_but_copy"])
+        self.win_3_but_copy2.setText(LANGUAGE("copy"))
+        self.main_work.window["window_3"].append(self.win_3_but_copy2)
+        self.main_work.window["second"].append(self.win_3_but_copy2)
 
     def navigation_window(self):
         self.main_work.window["navigation"] = list()
