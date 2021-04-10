@@ -6,6 +6,8 @@ folderId = 'b1gda6o00s0iueac3b1c'
 iam_url = 'https://iam.api.cloud.yandex.net/iam/v1/tokens'
 oauth_token = 'AQAAAAAVdxsdAATuwSCvXz4_A0kLkDik2MpRZ1I'
 
+'''Это вспомогательная функция, она вызывается из translate_text автоматически'''
+
 
 def detect_language(string):  # функция определяет язык текста
     iam_token = get_iam_token(iam_url, oauth_token)
