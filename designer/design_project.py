@@ -8,6 +8,7 @@ from designer.secondary_functions import Request, Work_size_window, pprint, Lang
 
 tmp = Language()
 LANGUAGE = tmp.request
+LANGUAGE_VALUE = tmp.request_value
 
 REQUEST = Request()
 WIN = Work_size_window()
@@ -32,6 +33,7 @@ class Example(QWidget):
         super().__init__()
         self.main_work = Main_work()
         self.main_work.window["save"] = list()
+        self.main_work.window["self"] = self
         self.initUI()
 
     def initUI(self):
@@ -60,11 +62,24 @@ class Example(QWidget):
 
         self.CSS_create()
 
+        self.font_create()
         self.general_window()
         self.navigation_window()
-        # self.start_work_window()
-        # self.setting_window()
+        self.start_work_window()
+        self.setting_window()
         self.window_2()
+        self.window_3()
+        self.main_work.work1()
+
+    def font_create(self):
+        self.font_text = QFont()
+        self.font_text.setPointSize(AD(16, font=True))
+
+        self.font_lab = QFont()
+        self.font_lab.setPointSize(AD(20, font=True))
+
+        self.font_but = QFont()
+        self.font_but.setPointSize(AD(16, font=True))
 
     def CSS_create(self):
 
@@ -94,10 +109,10 @@ class Example(QWidget):
 
         self.CSS_dict["gen_lab_nav"] = CSS_lab + "{" + nav_bg_CSS + ";}"
 
-
-        self.CSS_dict["nav_button"] = CSS_but + "{" + nav_text_CSS + rad_bor_CSS + nav_bg_CSS + "}" + " " + \
+        but = CSS_but + "{" + nav_text_CSS + rad_bor_CSS + nav_bg_CSS + "}" + " " + \
                                           CSS_but + CSS_hov + "{" + nav_sec_text_h_CSS + nav_h_CSS + "}" + " " + \
                                           CSS_but + CSS_pre + "{" + nav_bg_p_CSS + nav_text_p_CSS + "}"
+        self.CSS_dict["nav_button"] = but
 
         self.CSS_dict["st_text_monologue"] = CSS_TE + "{" + text_CSS + bg_CSS + border_CSS + "}"
 
@@ -107,13 +122,21 @@ class Example(QWidget):
         self.CSS_dict["set_lab_cha_lan"] = CSS_lab + "{" + text_CSS + "}"
         self.CSS_dict["set_but_cha_lan"] = CSS_but + CSS_hov + "{" + rad_bor_CSS + "}"
         self.CSS_dict["win_2_but_find"] = CSS_but + "{" + nav_text_CSS + nav_bg_CSS + "}"
+        self.CSS_dict["win_2_tex_ret"] = CSS_TE + "{" + nav_text_CSS + nav_bg_CSS + "}"
+        self.CSS_dict["win_2_but_txt"] = CSS_but + "{" + nav_text_CSS + nav_bg_CSS + "}"
+        self.CSS_dict["win_2_but_docx"] = CSS_but + "{" + nav_text_CSS + nav_bg_CSS + "}"
+        self.CSS_dict["win_2_but_mp3"] = CSS_but + "{" + nav_text_CSS + nav_bg_CSS + "}"
+        self.CSS_dict["win_3_scr"] = CSS_TE + "{" + nav_text_CSS + nav_bg_CSS + "}"
+        self.CSS_dict["win_3_lan1"] = CSS_lab + "{" + text_CSS + "}"
+        self.CSS_dict["win_3_com_box_lan"] = CSS_CB + "{" + nav_text_CSS + nav_bg_CSS + "}"
 
     def general_window(self):
         self.main_work.window["general"] = list()
+        self.main_work.window["second"] = list()
 
         self.size_window = REQUEST.get_request("size_display", tup=True)
 
-        self.pos_top = AD([0, 25])[1]
+        self.pos_top = 25
 
 
         self.gen_lab_head = QLabel(self)
@@ -154,13 +177,14 @@ class Example(QWidget):
 
     def window_2(self):
         self.main_work.window["window_2"] = list()
-        self.main_work.window["second"] = list()
 
         self.win_2_but_find = QPushButton(self)
-        pos = AD([self.size_window[0] // 4 + self.size_window[0] // 12,
-                  25 + self.size_window[1] // 1.2, 100, 25])
+        pos = AD([self.size_window[0] // 4 + self.size_window[0] // 20,
+                  25 + self.size_window[1] // 1.2,
+                  self.size_window[0] // 6,
+                  self.size_window[1] // 20])
         self.win_2_but_find.setGeometry(pos[0], pos[1], pos[2], pos[3])
-        self.win_2_but_find.clicked.connect(self.choose_file)
+        self.win_2_but_find.clicked.connect(self.main_work.choose_file)
         self.win_2_but_find.setStyleSheet(self.CSS_dict["win_2_but_find"])
         self.win_2_but_find.setText(LANGUAGE("find_file"))
         # self.win_2_but_find.clicked.connect(self.save)
@@ -169,18 +193,139 @@ class Example(QWidget):
 
         self.win_2_tex_ret = QTextEdit(self)
         pos = AD([self.size_window[0] // 4 + self.size_window[0] // 12,
-                  25 + self.size_window[1] // 12, 100, 25])
+                  25 + self.size_window[1] // 12,
+                  self.size_window[0] // 1.666,
+                  self.size_window[1] // 1.5])
         self.win_2_tex_ret.setGeometry(pos[0], pos[1], pos[2], pos[3])
-        self.win_2_tex_ret.append()
+        self.win_2_tex_ret.setStyleSheet(self.CSS_dict["win_2_tex_ret"])
+        self.win_2_tex_ret.setFont(self.font_text)
+        self.main_work.window["window_2"].append(self.win_2_tex_ret)
+        self.main_work.window["second"].append(self.win_2_tex_ret)
+
+        self.win_2_but_txt = QPushButton(self)
+        pos = AD([self.size_window[0] // 4 + self.size_window[0] // 4,
+                  25 + self.size_window[1] // 1.2,
+                  self.size_window[0] // 8.33,
+                  self.size_window[1] // 20])
+        self.win_2_but_txt.setGeometry(pos[0], pos[1], pos[2], pos[3])
+        self.win_2_but_txt.clicked.connect(self.main_work.transformation_on_txt)
+        self.win_2_but_txt.setStyleSheet(self.CSS_dict["win_2_but_txt"])
+        self.win_2_but_txt.setText(LANGUAGE("con_txt"))
+        # self.win_2_but_find.clicked.connect(self.save)
+        self.main_work.window["window_2"].append(self.win_2_but_txt)
+        self.main_work.window["second"].append(self.win_2_but_txt)
+
+        self.win_2_but_docx = QPushButton(self)
+        pos = AD([self.size_window[0] // 4 + self.size_window[0] // 2.5,
+                  25 + self.size_window[1] // 1.2,
+                  self.size_window[0] // 8.33,
+                  self.size_window[1] // 20])
+        self.win_2_but_docx.setGeometry(pos[0], pos[1], pos[2], pos[3])
+        self.win_2_but_docx.clicked.connect(self.main_work.transformation_on_docx)
+        self.win_2_but_docx.setStyleSheet(self.CSS_dict["win_2_but_docx"])
+        self.win_2_but_docx.setText(LANGUAGE("con_docx"))
+        # self.win_2_but_find.clicked.connect(self.save)
+        self.main_work.window["window_2"].append(self.win_2_but_docx)
+        self.main_work.window["second"].append(self.win_2_but_docx)
+
+        self.win_2_but_mp3 = QPushButton(self)
+        pos = AD([self.size_window[0] // 4 + self.size_window[0] // 1.8,
+                  25 + self.size_window[1] // 1.2,
+                  self.size_window[0] // 8.33,
+                  self.size_window[1] // 20])
+        self.win_2_but_mp3.setGeometry(pos[0], pos[1], pos[2], pos[3])
+        self.win_2_but_mp3.clicked.connect(self.main_work.transformation_on_docx)
+        self.win_2_but_mp3.setStyleSheet(self.CSS_dict["win_2_but_mp3"])
+        self.win_2_but_mp3.setText(LANGUAGE("con_mp3"))
+        # self.win_2_but_find.clicked.connect(self.save)
+        self.main_work.window["window_2"].append(self.win_2_but_mp3)
+        self.main_work.window["second"].append(self.win_2_but_mp3)
+
+    def window_3(self):
+        self.main_work.window["window_3"] = list()
+
+        self.win_3_scr_1 = QTextEdit(self)
+        pos = AD([self.size_window[0] // 4 + self.size_window[0] // 19,
+                  25 + self.size_window[1] // 5,
+                  self.size_window[0] // 3.333,
+                  self.size_window[1] // 1.5])
+        self.win_3_scr_1.setGeometry(pos[0], pos[1], pos[2], pos[3])
+        self.win_3_scr_1.setStyleSheet(self.CSS_dict["win_3_scr"])
+        self.win_3_scr_1.setFont(self.font_text)
+        self.main_work.window["window_3"].append(self.win_3_scr_1)
+        self.main_work.window["second"].append(self.win_3_scr_1)
+
+        self.win_3_scr_2 = QTextEdit(self)
+        pos = AD([self.size_window[0] // 4 + self.size_window[0] // 2.5,
+                  25 + self.size_window[1] // 5,
+                  self.size_window[0] // 3.333,
+                  self.size_window[1] // 1.5])
+        self.win_3_scr_2.setGeometry(pos[0], pos[1], pos[2], pos[3])
+        self.win_3_scr_2.setStyleSheet(self.CSS_dict["win_3_scr"])
+        self.win_3_scr_2.setFont(self.font_text)
+        self.main_work.window["window_3"].append(self.win_3_scr_2)
+        self.main_work.window["second"].append(self.win_3_scr_2)
+
+        self.win_3_lan1 = QLabel(self)
+        pos = AD([self.size_window[0] // 4 + self.size_window[0] // 10,
+                  25 + self.size_window[1] // 20,
+                  self.size_window[0] // 5,
+                  self.size_window[1] // 10])
+        self.win_3_lan1.setGeometry(pos[0], pos[1], pos[2], pos[3])
+        self.win_3_lan1.setStyleSheet(self.CSS_dict["win_3_lan1"])
+        # self.win_3_lan1.setText(LANGUAGE_VALUE())
+        self.win_3_lan1.setFont(self.font_lab)
+        self.main_work.window["window_3"].append(self.win_3_lan1)
+        self.main_work.window["second"].append(self.win_3_lan1)
 
 
-    def choose_file(self):
-        fname = QFileDialog.getOpenFileName(
-            self, 'Выбрать картинку', '',
-            'Картинка (*.jpg);;Картинка (*.png);;Картинка (*.jpg);;Все файлы (*)')[0]
-        self.main_work.window["fname"] = fname
-        pprint("Вставленна фотография' ", fname)
+        self.win_3_com_box_lan1 = QComboBox(self)
+        pos = AD([self.size_window[0] // 4 + self.size_window[0] // 4,
+                  25 + self.size_window[1] // 6.3,
+                  self.size_window[0] // 10,
+                  self.size_window[1] // 24])
+        self.win_3_com_box_lan1.setGeometry(pos[0], pos[1], pos[2], pos[3])
+        # self.set_com_box_theme.
+        version = REQUEST.get_full_request("name", "*", "language", table="language")[0][2:]
+        for i in version:
+            self.win_3_com_box_lan1.addItem(str(i))
 
+        self.win_3_com_box_lan1.setCurrentText(REQUEST.get_request("lan1"))
+
+        self.win_3_com_box_lan1.setStyleSheet(self.CSS_dict["win_3_com_box_lan"])
+        self.main_work.window["window_3"].append(self.win_3_com_box_lan1)
+        self.main_work.window["second"].append(self.win_3_com_box_lan1)
+
+
+        self.win_3_com_box_lan2 = QComboBox(self)
+        pos = AD([self.size_window[0] // 4 + self.size_window[0] // 2.5,
+                  25 + self.size_window[1] // 6.3,
+                  self.size_window[0] // 10,
+                  self.size_window[1] // 24])
+        self.win_3_com_box_lan2.setGeometry(pos[0], pos[1], pos[2], pos[3])
+        # self.set_com_box_theme.
+        version = REQUEST.get_full_request("name", "*", "language", table="language")[0][2:]
+        for i in version:
+            self.win_3_com_box_lan2.addItem(str(i))
+
+        self.win_3_com_box_lan2.setCurrentText(REQUEST.get_request("lan2"))
+
+        self.win_3_com_box_lan2.setStyleSheet(self.CSS_dict["win_3_com_box_lan"])
+        self.main_work.window["window_3"].append(self.win_3_com_box_lan2)
+        self.main_work.window["second"].append(self.win_3_com_box_lan2)
+
+        # self.win_2_but_docx = QPushButton(self)
+        # pos = AD([self.size_window[0] // 4 + self.size_window[0] // 2.5,
+        #           25 + self.size_window[1] // 1.2,
+        #           self.size_window[0] // 8.33,
+        #           self.size_window[1] // 20])
+        # self.win_2_but_docx.setGeometry(pos[0], pos[1], pos[2], pos[3])
+        # self.win_2_but_docx.clicked.connect(self.main_work.transformation_on_docx)
+        # self.win_2_but_docx.setStyleSheet(self.CSS_dict["win_2_but_docx"])
+        # self.win_2_but_docx.setText(LANGUAGE("con_docx"))
+        # # self.win_2_but_find.clicked.connect(self.save)
+        # self.main_work.window["window_3"].append(self.win_2_but_docx)
+        # self.main_work.window["second"].append(self.win_2_but_docx)
 
     def navigation_window(self):
         self.main_work.window["navigation"] = list()
@@ -189,15 +334,17 @@ class Example(QWidget):
 
 
         self.gen_lab_nav = QLabel(self)
-        pos = AD([0, 25, self.size_window[0] // 4, self.size_window[1] - 25])
+        pos = AD([0, 25,
+                  self.size_window[0] // 4,
+                  self.size_window[1] - 25])
         self.gen_lab_nav.setGeometry(pos[0], pos[1], pos[2], pos[3])
         self.gen_lab_nav.setStyleSheet(self.CSS_dict["gen_lab_nav"])
         self.main_work.window["navigation"].append(self.gen_lab_nav)
 
         count = int(REQUEST.get_request("count_nav_but"))
-        pos = AD([0, 25, self.size_window[0] // 4, (self.size_window[1] - self.pos_top) // count])
-        font = QFont()
-        font.setPointSize(AD(16, font=True))
+        pos = AD([0, 25,
+                  self.size_window[0] // 4,
+                  (self.size_window[1] - self.pos_top) // count])
 
         file = [LANGUAGE("nav_but_1"), LANGUAGE("nav_but_2"), LANGUAGE("nav_but_3"), LANGUAGE("nav_but_4")]
         for i in range(count):
@@ -215,7 +362,7 @@ class Example(QWidget):
             # print(type(self.CSS_dict["nav_button"]) ,self.CSS_dict["nav_button"])
             self.nav_button.setStyleSheet(self.CSS_dict["nav_button"])
 
-            self.nav_button.setFont(font)
+            self.nav_button.setFont(self.font_but)
             self.nav_button.setText(text)
             self.nav_button.clicked.connect(click)
             if self.cur:
@@ -224,29 +371,32 @@ class Example(QWidget):
 
     def setting_window(self):
         self.main_work.window["setting"] = list()
-        self.main_work.window["second"] = list()
 
         self.set_lab_theme = QLabel(self)
         pos = AD([self.size_window[0] // 4 + self.size_window[0] // 10,
-                  25 + self.size_window[1] // 10, 100, 50])
+                  25 + self.size_window[1] // 10,
+                  self.size_window[0] // 10,
+                  self.size_window[1] // 12])
         self.set_lab_theme.setGeometry(pos[0], pos[1], pos[2], pos[3])
         # print(type(self.CSS_dict["set_lab_theme"]), self.CSS_dict["set_lab_theme"])
         self.set_lab_theme.setStyleSheet(self.CSS_dict["set_lab_theme"])
         self.set_lab_theme.setText("Тема")
-        font = QFont()
-        font.setPointSize(AD(20, font=True))
-        self.set_lab_theme.setFont(font)
+        self.set_lab_theme.setFont(self.font_lab)
         self.main_work.window["setting"].append(self.set_lab_theme)
         self.main_work.window["second"].append(self.set_lab_theme)
 
         self.set_com_box_theme = QComboBox(self)
         pos = AD([self.size_window[0] // 4 + self.size_window[0] // 12,
-                  25 + self.size_window[1] // 10 * 2, 100, 25])
+                  25 + self.size_window[1] // 10 * 2,
+                  self.size_window[0] // 10,
+                  self.size_window[1] // 24])
         self.set_com_box_theme.setGeometry(pos[0], pos[1], pos[2], pos[3])
         # self.set_com_box_theme.
         version = len(REQUEST.get_full_request("name", "*", "text", table="appcolors")[0]) - 3
         for i in range(1, version + 1):
             self.set_com_box_theme.addItem(f"version{i}")
+
+        self.set_com_box_theme.setCurrentText(REQUEST.get_request("version"))
 
         self.set_com_box_theme.setStyleSheet(self.CSS_dict["set_com_box_theme"])
         self.main_work.window["setting"].append(self.set_com_box_theme)
@@ -254,7 +404,9 @@ class Example(QWidget):
 
         self.set_but_save = QPushButton(self)
         pos = AD([self.size_window[0] // 4 + self.size_window[0] // 12,
-                  25 + self.size_window[1] // 3.5, 100, 25])
+                  25 + self.size_window[1] // 3.5,
+                  self.size_window[0] // 10,
+                  self.size_window[1] // 24])
         self.set_but_save.setGeometry(pos[0], pos[1], pos[2], pos[3])
 
         self.set_but_save.setStyleSheet(self.CSS_dict["set_but_save"])
@@ -265,20 +417,25 @@ class Example(QWidget):
 
         self.set_lab_cha_lan = QLabel(self)
         pos = AD([self.size_window[0] // 4 + self.size_window[0] // 2.8,
-                  25 + self.size_window[1] // 7, 150, 35])
+                  25 + self.size_window[1] // 7,
+                  self.size_window[0] // 6.66,
+                  self.size_window[1] // 17.14])
         self.set_lab_cha_lan.setGeometry(pos[0], pos[1], pos[2], pos[3])
         self.set_lab_cha_lan.setText(LANGUAGE("language_name"))
         self.set_lab_cha_lan.setStyleSheet(self.CSS_dict["set_lab_cha_lan"])
-        self.set_lab_cha_lan.setFont(font)
+        self.set_lab_cha_lan.setFont(self.font_lab)
         self.main_work.window["setting"].append(self.set_lab_cha_lan)
         self.main_work.window["second"].append(self.set_lab_cha_lan)
 
         self.set_but_cha_lan = QPushButton(self)
         pos = AD([self.size_window[0] // 4 + self.size_window[0] // 3,
-                  25 + self.size_window[1] // 5, 160, 110])
+                  25 + self.size_window[1] // 5,
+                  self.size_window[0] // 6.25,
+                  self.size_window[1] // 5.45])
         self.set_but_cha_lan.setGeometry(pos[0], pos[1], pos[2], pos[3])
         self.set_but_cha_lan.setIcon(QIcon("data/img/" + LANGUAGE("way_image")))
-        size = AD([150, 100])
+        size = AD([self.size_window[0] // 6.66,
+                   self.size_window[1] // 6])
         self.set_but_cha_lan.setIconSize(QSize(size[0], size[1]))
         self.set_but_cha_lan.setStyleSheet(self.CSS_dict["set_but_cha_lan"])
         self.set_but_cha_lan.clicked.connect(self.main_work.change_lan)
@@ -294,16 +451,13 @@ class Example(QWidget):
 
     def start_work_window(self):
         self.main_work.window["start"] = list()
-        self.main_work.window["second"] = list()
 
         self.st_text_monologue = QTextEdit(self)
         pos = AD([self.size_window[0] // 3, self.size_window[1] // 8,
                  self.size_window[0] - self.size_window[0] // 2.5,
                  self.size_window[1] // 1.5])
 
-        font = QFont()
-        font.setPointSize(20)
-        self.st_text_monologue.setFont(font)
+        self.st_text_monologue.setFont(self.font_text)
 
         self.st_text_monologue.setStyleSheet(self.CSS_dict["st_text_monologue"])  # пока не завершено
         self.st_text_monologue.setGeometry(pos[0], pos[1], pos[2], pos[3])
@@ -311,6 +465,8 @@ class Example(QWidget):
         text = open("data/text/start_monologue.txt", encoding="utf-8").readlines()
         for i in text:
             self.st_text_monologue.append(i)
+        self.main_work.window["start"].append(self.st_text_monologue)
+        self.main_work.window["second"].append(self.st_text_monologue)
 
 
 class Main_work:
@@ -321,13 +477,29 @@ class Main_work:
         sys.exit()
 
     def work1(self):
-        print("1")
+        for i in self.window['second']:
+            i.hide()
+        for j in self.window["start"]:
+            j.show()
 
     def work2(self):
-        print("2")
+        for i in self.window['second']:
+            i.hide()
+        for j in self.window["window_2"]:
+            j.show()
 
     def work3(self):
-        print("3")
+        for i in self.window['second']:
+            i.hide()
+        for j in self.window["window_3"]:
+            j.show()
+
+    def setting(self):
+        pprint("Использовалась команда' ", "войти в ", "настройки")
+        for i in self.window['second']:
+            i.hide()
+        for j in self.window["setting"]:
+            j.show()
 
     def save(self, version):
         pprint("Использовалась команда' ", "сохранение")
@@ -356,8 +528,18 @@ class Main_work:
     def void(self):
         pass
 
-    def setting(self):
-        pprint("Использовалась команда' ", "войти в ", "настройки")
+    def transformation_on_txt(self):
+        pprint("Использовалась команда' ", "преобразовать в ", "txt")
+
+    def transformation_on_docx(self):
+        pprint("Использовалась команда' ", "преобразовать в ", "docx")
+
+    def choose_file(self):
+        fname = QFileDialog.getOpenFileName(
+            self.window["self"], 'Выбрать картинку', '',
+            'Картинка (*.jpg *.png);;Картинка (*.png);;Картинка (*.jpg);;Все файлы (*)')[0]
+        self.window["fname"] = fname
+        pprint("Вставленна фотография' ", fname)
 
 
 def except_hook(cls, exception, traceback):  # если произойдет ошибка то Pyqt5 не будет замалчивать её

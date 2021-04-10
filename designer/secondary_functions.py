@@ -29,7 +29,7 @@ class Request:
         result = cur.execute(f"SELECT {version} FROM {table} WHERE name == '{request}'").fetchall()
 
         if not result and Admin.admin:
-            print(f"По запросу {request} ничего не найдено")
+            pprint(f"По запросу {request} ничего не найдено'")
             return
         else:
             result = result[0][0]
@@ -63,7 +63,7 @@ class Request:
             return result
 
         if not result and Admin.admin:
-            print(f"По запросу {if_request} ничего не найдено")
+            pprint(f"По запросу {if_request} ничего не найдено'")
             return
         else:
             result = result[0][0]
@@ -140,7 +140,18 @@ class Language:
         result = cur.execute(f"SELECT {self.language} FROM language WHERE name == '{rec}'").fetchall()
 
         if not result:
-            print("Пустой запрос язык", rec)
+            pprint("Пустой запрос язык' ", rec)
+            return
+        pprint(result[0][0], " Результат запроса языка' ", rec)
+        return result[0][0]
+
+    def request_value(self, rec):
+        cur = self.base.cursor()
+
+        result = cur.execute(f"SELECT {self.language} FROM language_value WHERE name == '{rec}'").fetchall()
+
+        if not result:
+            pprint("Пустой запрос язык' ", rec)
             return
         pprint(result[0][0], " Результат запроса языка' ", rec)
         return result[0][0]
