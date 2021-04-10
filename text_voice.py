@@ -12,5 +12,3 @@ def voice_text(text, lang):
     else:
         raise TextInvalidValue
 
-
-voice_text('', 'asdads')
