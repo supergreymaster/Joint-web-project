@@ -167,6 +167,9 @@ def pprint(*text):  # система отчетов
             tmp = tmp + str(i)
         print(tmp)
 
+class Report_database:
+    pass
+
 
 class Admin:  # система проверки админских прав
     admin = False

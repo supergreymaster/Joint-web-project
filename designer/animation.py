@@ -1,6 +1,7 @@
 import pygame
 from designer.secondary_functions import Request, pprint
 
+
 class AnimatedSprite(pygame.sprite.Sprite):
     def __init__(self, sheet, columns, rows, x, y):
         super().__init__(all_sprites)
