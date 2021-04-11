@@ -52,5 +52,6 @@ class Title_animation:
             if pygame.time.get_ticks() == 3000:
                 running = False
 
+
 Title_animation()
 all_sprites = 0
