@@ -2,6 +2,7 @@ import sys
 
 # Импорт модулей PyQt5
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QLabel, QTextEdit, QComboBox, QFileDialog
+from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtGui import QPixmap, QFont, QIcon, QCursor
 from PyQt5.QtCore import QSize, Qt
 
@@ -34,7 +35,7 @@ CSS_pre = ":pressed"
 
 
 # Начало интерфейса
-class Example(QWidget):
+class Example(QMainWindow):
     def __init__(self):  # инициальзаруется Main_work
         super().__init__()
         self.main_work = Main_work()
