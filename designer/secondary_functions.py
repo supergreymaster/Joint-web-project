@@ -7,15 +7,18 @@ class Request:  # Работает с базами данных
     def __init__(self):  # Ставит первоначальныю базу данных и таблицу
         self.base = sqlite3.connect("data/SQL/Constant.db")
         self.table = "constant"
+        self.admin_check(self.table)
 
     def setRequest(self, name):  # при вызове сменяет базу данных
         if ".db" not in name:
             name = name + ".db"
 
         self.base = sqlite3.connect(f"data/SQL/{name}")
+        self.admin_check(self.table)
 
     def setTable(self, name):  # при вызове сменяет таблицу
         self.table = name
+        self.admin_check(self.table)
 
     def get_request(self, request, tup=False, color=False):  # запрашивает данные
         cur = self.base.cursor()
@@ -25,19 +28,23 @@ class Request:  # Работает с базами данных
 
         if color:  # если цвет правда, то он сменяет таблицу
             table = "appcolors"
+            self.admin_check(table)
+
             version = cur.execute(f"SELECT value FROM constant WHERE name == 'version'").fetchall()[0][0]
         result = cur.execute(f"SELECT {version} FROM {table} WHERE name == '{request}'").fetchall()
 
         if not result:  # обрабатывает пустой запрос
-            pprint(f"По запросу {request} ничего не найдено'")
+            pprint(f"По запросу {request} ничего не найдено'", warning="warning")
             return
         else:
             result = result[0][0]
             pprint(result, " Результат запроса' ", request)
 
-        if tup:  # если правда то возращает в виде списка
+        if tup:  # если правда то возращает в виде списка числа
             result = list(map(lambda x: int(x), result.split()))
         elif color:  # если правда переводит цвет в шестнацитиричную систему
+            if Admin.admin and (len(result.split()) != 3 or "#" in result):
+                pprint("Некоректный цвет по запросу ", request, " ответ: ", result, warning="error")
             if "#" not in result:
                 result = '#' + ''.join(map(lambda i: f"{hex(int(i))}"[2:], result.split()))
 
@@ -47,12 +54,18 @@ class Request:  # Работает с базами данных
                          tup=False, color=False, null=False, table=None, all=True):
         # запрашивает полный запрос с таблицей и всеми значениями
         cur = self.base.cursor()
+        tablee = str(table)
+        table = tablee
+
+        if not tablee:  # если таблица не заполнена, то вводится стандартная
+            table = self.table
 
         if color:  # если цвет правда, то он сменяет таблицу
             table = "appcolors"
+            self.admin_check(table)
 
-        if not table:  # если таблица не заполнена, то вводится стандартная
-            table = self.table
+        if tablee:
+            table = tablee
 
         if null:  # запрашивает без условия
             result = cur.execute(f"SELECT {get_col} FROM {table}").fetchall()
@@ -63,16 +76,21 @@ class Request:  # Работает с базами данных
             pprint(result, " Результат полного запроса' ", if_request)
             return result
 
-        if not result and Admin.admin:
-            pprint(f"По запросу {if_request} ничего не найдено'")
+        if not result:
+            pprint(f"По запросу {if_request} ничего не найдено'", warning="warning")
             return
         else:
             result = result[0][0]
             pprint(result, " Результат полного запроса' ", if_request)
 
         if tup:
+            if Admin.admin and " " not in result:
+                pprint("Список некоректен по запросу ", if_request, " ответ: ",
+                       result, warning="error")
             result = list(map(lambda x: int(x), result.split()))
         elif color:
+            if Admin.admin and (len(result.split()) != 3 or "#" in result):
+                pprint("Некоректный цвет по запросу", if_request, " ответ: ", result, warning="error")
             if "#" not in result:
                 result = '#' + ''.join(map(lambda i: f"{hex(int(i))}"[2:], result.split()))
 
@@ -81,9 +99,27 @@ class Request:  # Работает с базами данных
     def change_base(self, name, value):  # изменяет базу данных
         cur = self.base.cursor()
 
+        self.admin_check(self.table, value='name', com=1)
+        self.admin_check(self.table, value='value', com=1)
+
         cur.execute(f"""UPDATE {self.table} SET value == '{value}' WHERE name == '{name}'""")
         self.base.commit()
         pprint("Изменена база данных' ", name, " ", value)
+
+    def admin_check(self, table, value=None, com=0):
+        if Admin.admin:
+            if com == 0:
+                try:
+                    cur = self.base.cursor()
+                    result = cur.execute(f"SELECT * FROM {table}").fetchall()
+                except sqlite3.OperationalError:
+                    pprint(f"Несуществует {self.base} базы данных или {table} таблицы", warning="error")
+            elif com == 1:
+                try:
+                    cur = self.base.cursor()
+                    result = cur.execute(f"SELECT {value} FROM {table}").fetchall()
+                except sqlite3.OperationalError:
+                    pprint(f"Стобца {value} не существует", warning="error")
 
 
 class Work_size_window:  # работает с адаптацией окна
@@ -121,6 +157,12 @@ class Work_size_window:  # работает с адаптацией окна
                 value = value[0]
             return int(int(value) * self.coef_font)
         c = 0
+
+        if type(value) is list:
+            pass
+        else:
+            pprint("Некоректные данные. не список. функция адаптация ", value, warning="error")
+
         list_tmp = list()
         for i in value:
             if c % 2 == 0:
@@ -137,38 +179,84 @@ class Language:  # Изменение языка
         cur = self.base.cursor()
         self.language = cur.execute(f"SELECT value FROM constant WHERE name == 'language'").fetchall()[0][0]
 
+        self.admin_check()
+        self.admin_check(table="language_value")
+        self.admin_check(value="name", com=1)
+        self.admin_check(value=self.language, com=1)
+
     def request(self, rec):
         cur = self.base.cursor()
 
         result = cur.execute(f"SELECT {self.language} FROM language WHERE name == '{rec}'").fetchall()
 
         if not result:
-            pprint("Пустой запрос язык' ", rec)
+            pprint("Пустой запрос язык' ", rec, warning="warning")
             return
         pprint(result[0][0], " Результат запроса языка' ", rec)
         return result[0][0]
 
-    def request_value(self, rec):
-        cur = self.base.cursor()
+    # def request_value(self, rec):
+    #     cur = self.base.cursor()
+    #
+    #     result = cur.execute(f"SELECT {self.language} FROM language_value WHERE name == '{rec}'").fetchall()
+    #
+    #     if not result:
+    #         pprint("Пустой запрос язык' ", rec, warning="warning")
+    #         return
+    #     pprint(result[0][0], " Результат запроса языка' ", rec)
+    #     return result[0][0]
 
-        result = cur.execute(f"SELECT {self.language} FROM language_value WHERE name == '{rec}'").fetchall()
+    def admin_check(self, table="language", value=None, com=0):
+        if Admin.admin:
+            if com == 0:
+                try:
+                    cur = self.base.cursor()
+                    result = cur.execute(f"SELECT * FROM {table}").fetchall()
+                except sqlite3.OperationalError:
+                    pprint(f"Несуществует {self.base} базы данных или {table} таблицы", warning="error")
+            elif com == 1:
+                try:
+                    cur = self.base.cursor()
+                    result = cur.execute(f"SELECT {value} FROM {table}").fetchall()
+                except sqlite3.OperationalError:
+                    pprint(f"Стобца {value} не существует", warning="error")
 
-        if not result:
-            pprint("Пустой запрос язык' ", rec)
-            return
-        pprint(result[0][0], " Результат запроса языка' ", rec)
-        return result[0][0]
 
-
-def pprint(*text):  # система отчетов
-    if Admin.admin:
-        tmp = ''
+def pprint(*text, warning="default"):  # система отчетов
+    if warning == "default":
+        tmp = ""
+        bs_name = ""
         for i in text:
-            tmp = tmp + str(i)
-        print(tmp)
+            i = str(i)
+            if "'" in i:
+                bs_name = i.strip()[:-1]
+            tmp = tmp + i
+        if bs_name not in report.base:
+            report.base[bs_name] = list()
+        report.base[bs_name].append(tmp)
+        # print(report.base)
+    elif warning == "error":
+        tmp = ""
+        bs_name = ""
+        for i in text:
+            i = str(i)
+            if "'" in i:
+                bs_name = i.strip()[:-1]
+            tmp = tmp + i
+        if bs_name not in report.base:
+            report.base[bs_name] = list()
+        report.base[bs_name].append(tmp)
+        print(report.base)
+    else:
+        pass
+
+
+def check_class(value, type):
+    pass
+
 
 class Report_database:
-    pass
+    base = {}
 
 
 class Admin:  # система проверки админских прав
@@ -180,5 +268,6 @@ class Admin:  # система проверки админских прав
         admin = True
 
 
+report = Report_database()
 Admin()
 

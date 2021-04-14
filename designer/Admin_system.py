@@ -83,7 +83,7 @@ def except_hook(cls, exception, traceback):
     sys.__excepthook__(cls, exception, traceback)
 
 
-if __name__ == '__main__':
+def work():
     app = QApplication(sys.argv)
     ex = Admin_system()
     ex.show()

@@ -13,7 +13,6 @@ from designer.secondary_functions import Request, Work_size_window, pprint, Lang
 # Создание заготовленых команд
 tmp = Language()
 LANGUAGE = tmp.request
-LANGUAGE_VALUE = tmp.request_value
 
 REQUEST = Request()
 WIN = Work_size_window()
