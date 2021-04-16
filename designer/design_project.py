@@ -9,6 +9,8 @@ from PyQt5.QtCore import QSize, Qt
 # Импорт модулей из secondary_function и Main_work
 from designer.Main_work import Main_work
 from designer.secondary_functions import Request, Work_size_window, pprint, Language
+from designer.Admin_system import Admin_system
+
 
 # Создание заготовленых команд
 tmp = Language()
@@ -148,6 +150,7 @@ class Example(QMainWindow):
         self.CSS_dict["win_3_but_voice"] = but
         self.CSS_dict["win_3_but_copy"] = but
         self.CSS_dict["win_3_but_tran"] = but
+        self.CSS_dict["set_but_adm"] = but
 
     def general_window(self):  # Создает шапку
         self.main_work.window["general"] = list()
@@ -541,12 +544,30 @@ class Example(QMainWindow):
         self.main_work.window["setting"].append(self.set_but_cha_lan)
         self.main_work.window["second"].append(self.set_but_cha_lan)
 
+        # Создает кнопку для администрации
+        self.set_but_adm = QPushButton(self)
+        pos = AD([self.size_window[0] // 4 + self.size_window[0] // 3,
+                  25 + self.size_window[1] // 1.2,
+                  self.size_window[0] // 10,
+                  self.size_window[1] // 24])
+        self.set_but_adm.setGeometry(pos[0], pos[1], pos[2], pos[3])
+        self.set_but_adm.setText(LANGUAGE("adm_text"))
+        self.set_but_adm.setStyleSheet(self.CSS_dict["set_but_adm"])
+        self.set_but_adm.clicked.connect(self.admin_sys)
+        self.main_work.window["setting"].append(self.set_but_adm)
+        self.main_work.window["second"].append(self.set_but_adm)
+
     def save(self):  # Обрабатывает нажатие кнопки сохранения
         # print(self.set_com_box_theme.currentText())
         self.main_work.save(self.set_com_box_theme.currentText())
 
     def roll_up(self):  # сворачивание экрана
         self.showMinimized()
+
+    def admin_sys(self):
+        pprint("Использовалась команда' ", "ввойти в ", "Админскую систему")
+        self.w2 = Admin_system()
+        self.w2.show()
 
 
 def except_hook(cls, exception, traceback):  # если произойдет ошибка то Pyqt5 не будет замалчивать её

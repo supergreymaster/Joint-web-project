@@ -229,4 +229,3 @@ def admin_system():
     sys.excepthook = except_hook
     sys.exit(app.exec())
 
-admin_system()
