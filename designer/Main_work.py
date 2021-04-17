@@ -128,3 +128,6 @@ class Main_work:  # Главная функция где происходит о
         pprint("Использовалась команда' ", "ввойти в ", "админскую систему")
         self.window["self"].w2 = Admin_system()
         self.window["self"].w2.show()
+
+    def feedback(self):
+        pprint("Использовалась команда' ", "обратной связи")

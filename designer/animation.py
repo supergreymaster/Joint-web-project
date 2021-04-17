@@ -365,7 +365,6 @@ def Title_work():
     request = Request()
     size = request.get_request("mini_win", tup=True)
 
-    print(size)
 
     screen = pygame.display.set_mode(size)
 
@@ -384,7 +383,6 @@ def Title_work():
     hello.setText(LANGUAGE("hello"))
     hello.font.setPointSize(30)
     list_all.append(hello)
-    print("Ok")
 
     login = Lineedit(screen)
     login.setGeometry(10, 50, 250, 30)
@@ -392,13 +390,13 @@ def Title_work():
     login.setColor(request.get_request("nav_text", color=True))
     login.setBorder(True)
     login.setBackgroundColor(request.get_request("navigation", color=True))
-    login.setColorBorder(request.get_request("nav_border", color=True))
+    login.setColorBorder((0, 0, 0))
     login.setAlign("right")
     login.font.setPointSize(20)
+    login.setMaxlen(26)
     login.setPlaceholder(LANGUAGE("login"))
     list_line_edit.append(login)
     list_all.append(login)
-    print("ok")
 
     password = Lineedit(screen)
     password.setGeometry(10, 100, 250, 30)
@@ -406,14 +404,14 @@ def Title_work():
     password.setColor(request.get_request("nav_text", color=True))
     password.setBorder(True)
     password.setBackgroundColor(request.get_request("navigation", color=True))
-    password.setColorBorder(request.get_request("nav_border", color=True))
+    password.setColorBorder((0, 0, 0))
     password.setAlign("right")
     password.font.setPointSize(20)
     password.setHash(True)
+    password.setMaxlen(26)
     password.setPlaceholder(LANGUAGE("password"))
     list_line_edit.append(password)
     list_all.append(password)
-    print("ok")
 
     def work():
         global running
@@ -431,10 +429,9 @@ def Title_work():
     send.setBackgroundColor(request.get_request("navigation", color=True))
     send.setColor(request.get_request("nav_text", color=True))
     send.setBorder(True)
-    send.setColorBorder(request.get_request("nav_border", color=True))
+    send.setColorBorder((0, 0, 0))
     list_button.append(send)
     list_all.append(send)
-    print("ok")
 
     pygame.display.flip()
 

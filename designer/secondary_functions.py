@@ -195,6 +195,7 @@ class Language:  # Изменение языка
 
     def request(self, rec, ignore=False):
         cur = self.base.cursor()
+        self.language = cur.execute(f"SELECT value FROM constant WHERE name == 'language'").fetchall()[0][0]
 
         result = cur.execute(f"SELECT {self.language} FROM language WHERE name == '{rec}'").fetchall()
 
