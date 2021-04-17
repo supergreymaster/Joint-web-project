@@ -1,5 +1,7 @@
 import pygame
-from designer.secondary_functions import Request, pprint
+from designer.secondary_functions import Request, pprint, Language
+
+LANGUAGE = Language().request
 
 
 class PushButton:  # Выпоняет функцию кнопки
@@ -379,9 +381,10 @@ def Title_work():
     hello = Label(screen)
     hello.setGeometry(50, 10, 250, 30)
     hello.setColor(request.get_request("text", color=True))
-    hello.setText("Представтесь системе")
+    hello.setText(LANGUAGE("hello"))
     hello.font.setPointSize(30)
     list_all.append(hello)
+    print("Ok")
 
     login = Lineedit(screen)
     login.setGeometry(10, 50, 250, 30)
@@ -392,9 +395,10 @@ def Title_work():
     login.setColorBorder(request.get_request("nav_border", color=True))
     login.setAlign("right")
     login.font.setPointSize(20)
-    login.setPlaceholder("Логин")
+    login.setPlaceholder(LANGUAGE("login"))
     list_line_edit.append(login)
     list_all.append(login)
+    print("ok")
 
     password = Lineedit(screen)
     password.setGeometry(10, 100, 250, 30)
@@ -406,9 +410,10 @@ def Title_work():
     password.setAlign("right")
     password.font.setPointSize(20)
     password.setHash(True)
-    password.setPlaceholder("Пароль")
+    password.setPlaceholder(LANGUAGE("password"))
     list_line_edit.append(password)
     list_all.append(password)
+    print("ok")
 
     def work():
         global running
@@ -421,7 +426,7 @@ def Title_work():
     send = PushButton(screen)
     send.setGeometry(10, 150, 100, 25)
     send.setClick(work)
-    send.setText("Войти")
+    send.setText(LANGUAGE("sing"))
     send.setBackGround(True)
     send.setBackgroundColor(request.get_request("navigation", color=True))
     send.setColor(request.get_request("nav_text", color=True))
@@ -429,6 +434,7 @@ def Title_work():
     send.setColorBorder(request.get_request("nav_border", color=True))
     list_button.append(send)
     list_all.append(send)
+    print("ok")
 
     pygame.display.flip()
 

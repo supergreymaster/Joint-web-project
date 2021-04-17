@@ -63,6 +63,7 @@ class Main_work:  # Главная функция где происходит о
             REQUEST.change_base("language", all_lang[0])
             last_lan = all_lang[0]
         pprint("Изменён язык' ", "с ", now_lan, " на ", last_lan)
+        self.window["self"].update()
 
     def void(self):  # Дополнительная функция которая скрывает все ошибачные функции
         pass
@@ -124,6 +125,6 @@ class Main_work:  # Главная функция где происходит о
         self.admin_sys()
 
     def admin_sys(self):
-        pprint("Использовалась команда' ", "ввойти в ", "Админскую систему")
+        pprint("Использовалась команда' ", "ввойти в ", "админскую систему")
         self.window["self"].w2 = Admin_system()
         self.window["self"].w2.show()

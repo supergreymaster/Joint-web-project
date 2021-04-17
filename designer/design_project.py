@@ -82,6 +82,50 @@ class Example(QMainWindow):
         self.window_3()
         self.main_work.work1()
 
+    def update(self):
+        pprint("Использовалась команда' ", "обновить настройки")
+        # Создает фон
+        for i in self.main_work.window["second"]:
+            i.hide()
+        for j in self.main_work.window["general"]:
+            j.hide()
+        for q in self.main_work.window["navigation"]:
+            q.hide()
+        self.main_work.window["second"] = list()
+        self.main_work.window["general"] = list()
+        self.main_work.window["navigation"] = list()
+
+        size_win = AD(REQUEST.get_request("size_display", tup=True))
+        pprint(size_win, " Ширина и высота приложения'")
+        self.label_main_window = QLabel(self)
+
+        tmp_CSS = CSS_bg + REQUEST.get_request('background', color=True) + ";"
+
+        self.label_main_window.setGeometry(0, 0, size_win[0], size_win[1])
+        self.label_main_window.setStyleSheet(CSS_lab + "{" + tmp_CSS + "}")
+
+        self.setWindowTitle(REQUEST.get_request("title_name"))
+
+        # Активирует функции
+        self.CSS_create()
+
+        self.font_create()
+        self.general_window()
+        self.navigation_window()
+        self.start_work_window()
+        self.setting_window()
+        self.window_2()
+        self.window_3()
+        self.main_work.work1()
+
+        self.label_main_window.show()
+        for i in self.main_work.window["start"]:
+            i.show()
+        for j in self.main_work.window["general"]:
+            j.show()
+        for q in self.main_work.window["navigation"]:
+            q.show()
+
     def font_create(self):  # Создает шрифты
         self.font_text = QFont()
         self.font_text.setPointSize(AD(16, font=True))
@@ -560,6 +604,7 @@ class Example(QMainWindow):
     def save(self):  # Обрабатывает нажатие кнопки сохранения
         # print(self.set_com_box_theme.currentText())
         self.main_work.save(self.set_com_box_theme.currentText())
+        self.update()
 
     def roll_up(self):  # сворачивание экрана
         self.showMinimized()
