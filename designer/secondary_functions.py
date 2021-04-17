@@ -22,7 +22,7 @@ class Request:  # Работает с базами данных
         self.table = name
         self.admin_check(self.table)
 
-    def get_request(self, request, tup=False, color=False):  # запрашивает данные
+    def get_request(self, request, tup=False, color=False, ignore=False):  # запрашивает данные
         cur = self.base.cursor()
 
         table = self.table
@@ -57,7 +57,7 @@ class Request:  # Работает с базами данных
         return result
 
     def get_full_request(self, col_check, get_col, if_request,
-                         tup=False, color=False, null=False, table=None, all=True):
+                         tup=False, color=False, null=False, table=None, all=True, ignore=False):
         # запрашивает полный запрос с таблицей и всеми значениями
         cur = self.base.cursor()
         tablee = str(table)
@@ -105,7 +105,7 @@ class Request:  # Работает с базами данных
 
         return result
 
-    def change_base(self, name, value):  # изменяет базу данных
+    def change_base(self, name, value, ignore=False):  # изменяет базу данных
         cur = self.base.cursor()
 
         self.admin_check(self.table, value='name', com=1)
@@ -193,7 +193,7 @@ class Language:  # Изменение языка
         self.admin_check(value="name", com=1)
         self.admin_check(value=self.language, com=1)
 
-    def request(self, rec):
+    def request(self, rec, ignore=False):
         cur = self.base.cursor()
 
         result = cur.execute(f"SELECT {self.language} FROM language WHERE name == '{rec}'").fetchall()

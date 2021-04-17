@@ -553,7 +553,7 @@ class Example(QMainWindow):
         self.set_but_adm.setGeometry(pos[0], pos[1], pos[2], pos[3])
         self.set_but_adm.setText(LANGUAGE("adm_text"))
         self.set_but_adm.setStyleSheet(self.CSS_dict["set_but_adm"])
-        self.set_but_adm.clicked.connect(self.admin_sys)
+        self.set_but_adm.clicked.connect(self.main_work.transition_admin)
         self.main_work.window["setting"].append(self.set_but_adm)
         self.main_work.window["second"].append(self.set_but_adm)
 
@@ -564,10 +564,6 @@ class Example(QMainWindow):
     def roll_up(self):  # сворачивание экрана
         self.showMinimized()
 
-    def admin_sys(self):
-        pprint("Использовалась команда' ", "ввойти в ", "Админскую систему")
-        self.w2 = Admin_system()
-        self.w2.show()
 
 
 def except_hook(cls, exception, traceback):  # если произойдет ошибка то Pyqt5 не будет замалчивать её

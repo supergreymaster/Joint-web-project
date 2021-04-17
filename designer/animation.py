@@ -77,6 +77,9 @@ class PushButton:  # Выпоняет функцию кнопки
     def setBackGround(self, bol=True):
         self.background = bol
 
+    def setColorBorder(self, color):
+        self.color_border = color
+
     def check_click(self, pos):
         i = self
         if i.x < pos[0] < i.x + i.wight and i.y < pos[1] < i.y + i.height:
@@ -200,6 +203,7 @@ class Lineedit:  # Линия которую можно изменять
         self.text_placeholder_bool = False
         self.text_placeholder = ""
         self.align = "right"
+        self.hash = False
 
     def show(self):
         self.show1_or_hide0 = True
@@ -232,8 +236,14 @@ class Lineedit:  # Линия которую можно изменять
     def setBorder(self, border):
         self.border = border
 
+    def setColorBorder(self, color):
+        self.color_border = color
+
     def setMaxlen(self, max_len):
         self.max_len = max_len
+
+    def setHash(self, bol):
+        self.hash = bol
 
     def setGeometry(self, x, y, wight, height):
         self.x = x
@@ -244,7 +254,7 @@ class Lineedit:  # Линия которую можно изменять
     def setBackGround(self, bol=True):
         self.background = bol
 
-    def setColorBorder(self, color):
+    def setBackgroundColor(self, color):
         self.color_background = color
 
     def clicked(self):
@@ -264,7 +274,7 @@ class Lineedit:  # Линия которую можно изменять
     def add_text(self, text):
         i = self
         if i.target:
-            if text not in "!@#$%^&*№;:?~`\/" and len(i.text) < i.max_len:
+            if text not in "^" and len(i.text) < i.max_len:
                 i.text = i.text + text
 
     def check_click(self, pos):
@@ -283,16 +293,20 @@ class Lineedit:  # Линия которую можно изменять
         else:
             text_ren = self.text
 
+            if self.hash:
+                tmp = (len(text_ren) - 1) * "*"
+                text_ren = tmp + text_ren[-1]
+
         if self.align == "center":
-            text = self.font.getFont().render(self.text, 1, self.color)
+            text = self.font.getFont().render(text_ren, 1, self.color)
             tmp_x = self.wight // 2 - (len(text_ren) // 2) * (self.font.size // 2)
             tmp_y = self.font.size // 2.4
         elif self.align == "left":
-            text = self.font.getFont().render(self.text, 1, self.color)
+            text = self.font.getFont().render(text_ren, 1, self.color)
             tmp_x = self.wight - len(text_ren) * (self.font.size // 2.3) - 3
             tmp_y = self.font.size // 2.4
         elif self.align == "right":
-            text = self.font.getFont().render(self.text, 1, self.color)
+            text = self.font.getFont().render(text_ren, 1, self.color)
             tmp_x = 2
             tmp_y = self.font.size // 2.4
         else:
@@ -339,34 +353,108 @@ class Hover(PushButton):  # подсвечивает кнопку
         self.show1_or_hide0 = other.show1_or_hide0
         self.font = other.font
 
-class Title_animation:
-    def __init__(self):
-        pygame.init()
-        pygame.display.set_caption('Загрузка')
-        request = Request()
-        size = request.get_request("size_display", tup=True)
 
-        print(size)
+def Title_work():
+    global running
+    running = True
+    exitt = False
+    pygame.init()
+    pygame.display.set_caption('Загрузка')
+    request = Request()
+    size = request.get_request("mini_win", tup=True)
 
-        screen = pygame.display.set_mode(size)
+    print(size)
 
-        clock = pygame.time.Clock()
+    screen = pygame.display.set_mode(size)
 
-        color_back = request.get_request("background", color=True)
-        pprint(color_back)
-        screen.fill(color_back)
+    clock = pygame.time.Clock()
 
-        pygame.display.flip()
+    color_back = request.get_request("background", color=True)
+    pprint(color_back)
+    screen.fill(color_back)
+    list_line_edit = list()
+    list_all = list()
+    list_button = list()
 
-        running = True
-        while running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
+    hello = Label(screen)
+    hello.setGeometry(50, 10, 250, 30)
+    hello.setColor(request.get_request("text", color=True))
+    hello.setText("Представтесь системе")
+    hello.font.setPointSize(30)
+    list_all.append(hello)
 
-            if pygame.time.get_ticks() == 3000:
+    login = Lineedit(screen)
+    login.setGeometry(10, 50, 250, 30)
+    login.setBackGround(True)
+    login.setColor(request.get_request("nav_text", color=True))
+    login.setBorder(True)
+    login.setBackgroundColor(request.get_request("navigation", color=True))
+    login.setColorBorder(request.get_request("nav_border", color=True))
+    login.setAlign("right")
+    login.font.setPointSize(20)
+    login.setPlaceholder("Логин")
+    list_line_edit.append(login)
+    list_all.append(login)
+
+    password = Lineedit(screen)
+    password.setGeometry(10, 100, 250, 30)
+    password.setBackGround(True)
+    password.setColor(request.get_request("nav_text", color=True))
+    password.setBorder(True)
+    password.setBackgroundColor(request.get_request("navigation", color=True))
+    password.setColorBorder(request.get_request("nav_border", color=True))
+    password.setAlign("right")
+    password.font.setPointSize(20)
+    password.setHash(True)
+    password.setPlaceholder("Пароль")
+    list_line_edit.append(password)
+    list_all.append(password)
+
+    def work():
+        global running
+        if bool(login.text) and bool(password.text):
+            request.change_base("user_login", login.text)
+            request.change_base("user_password", password.text)
+            request.change_base("user", "1")
+            running = False
+
+    send = PushButton(screen)
+    send.setGeometry(10, 150, 100, 25)
+    send.setClick(work)
+    send.setText("Войти")
+    send.setBackGround(True)
+    send.setBackgroundColor(request.get_request("navigation", color=True))
+    send.setColor(request.get_request("nav_text", color=True))
+    send.setBorder(True)
+    send.setColorBorder(request.get_request("nav_border", color=True))
+    list_button.append(send)
+    list_all.append(send)
+
+    pygame.display.flip()
+
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
                 running = False
+                exitt = True
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                for i in list_button:
+                    i.check_click(event.pos)
+                for i in list_line_edit:
+                    i.check_click(event.pos)
+            if event.type == pygame.KEYDOWN:
+                for i in list_line_edit:
+                    i.add_special_characters(event)
+            if event.type == pygame.TEXTINPUT:
+                for i in list_line_edit:
+                    i.add_text(event.text)
+        screen.fill(color_back)
+        for i in list_all:
+            i.render()
+        pygame.display.flip()
+    pygame.quit()
+    return exitt
 
 
-Title_animation()
+running = True
 all_sprites = 0

@@ -2,6 +2,8 @@ import sys
 import pyperclip
 from designer.secondary_functions import pprint, Request
 from PyQt5.QtWidgets import QFileDialog
+from designer.animation import Title_work
+from designer.Admin_system import Admin_system
 
 REQUEST = Request()
 
@@ -112,3 +114,16 @@ class Main_work:  # Главная функция где происходит о
 
     def translate(self):  # Обрабатывает перевод текста
         pprint("Использовалась команда' ", "перевести текст ")
+
+    def transition_admin(self):
+        pprint("Использовалась команда' ", "войти в ", "админскую систему")
+        if REQUEST.get_request("user") == "0":
+            tmp = Title_work()
+            if tmp:
+                return
+        self.admin_sys()
+
+    def admin_sys(self):
+        pprint("Использовалась команда' ", "ввойти в ", "Админскую систему")
+        self.window["self"].w2 = Admin_system()
+        self.window["self"].w2.show()
