@@ -375,7 +375,7 @@ class Example(QMainWindow):
                   self.size_window[0] // 10,
                   self.size_window[1] // 24])
         self.win_2_but_voice.setGeometry(pos[0], pos[1], pos[2], pos[3])
-        self.win_2_but_voice.clicked.connect(self.main_work.voice1)
+        self.win_2_but_voice.clicked.connect(self.main_work.voice)
         self.win_2_but_voice.setStyleSheet(self.CSS_dict["win_3_but_voice"])
         self.win_2_but_voice.setText(LANGUAGE("voice"))
         self.main_work.window["window_2"].append(self.win_2_but_voice)
@@ -388,7 +388,7 @@ class Example(QMainWindow):
                   self.size_window[0] // 10,
                   self.size_window[1] // 24])
         self.win_2_but_copy.setGeometry(pos[0], pos[1], pos[2], pos[3])
-        self.win_2_but_copy.clicked.connect(self.main_work.ccopy2)
+        self.win_2_but_copy.clicked.connect(self.main_work.ccopy)
         self.win_2_but_copy.setStyleSheet(self.CSS_dict["win_3_but_copy"])
         self.win_2_but_copy.setText(LANGUAGE("copy"))
         self.main_work.window["window_2"].append(self.win_2_but_copy)
@@ -398,7 +398,7 @@ class Example(QMainWindow):
         self.win_2_con = QLabel(self)
         pos = AD([self.size_window[0] // 4 + self.size_window[0] // 2.5,
                   25 + self.size_window[1] // 200,
-                  self.size_window[0] // 5,
+                  self.size_window[0] // 4,
                   self.size_window[1] // 10])
         self.win_2_con.setGeometry(pos[0], pos[1], pos[2], pos[3])
         self.win_2_con.setStyleSheet(self.CSS_dict["win_3_lan1"])
