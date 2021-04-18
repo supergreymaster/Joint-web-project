@@ -55,7 +55,10 @@ class Example(QMainWindow):
         self.setWindowFlags(Qt.FramelessWindowHint)
 
         # Создает фон
-        size_win = AD(REQUEST.get_request("size_display", tup=True))
+        tmp = REQUEST.get_request("size_display", tup=True)
+        if not tmp:
+            tmp = [1000, 600]
+        size_win = AD(tmp)
         pprint(size_win, " Ширина и высота приложения'")
         self.setGeometry((WIN.wight_window - size_win[0]) // 2, (WIN.height_window - size_win[1]) // 2,
                          size_win[0], size_win[1])
@@ -93,7 +96,10 @@ class Example(QMainWindow):
         self.main_work.window["general"] = list()
         self.main_work.window["navigation"] = list()
 
-        size_win = AD(REQUEST.get_request("size_display", tup=True))
+        tmp = REQUEST.get_request("size_display", tup=True)
+        if not tmp:
+            tmp = [1000, 600]
+        size_win = AD(tmp)
         pprint(size_win, " Ширина и высота приложения'")
         self.label_main_window = QLabel(self)
 
@@ -201,7 +207,10 @@ class Example(QMainWindow):
         self.main_work.window["general"] = list()
         self.main_work.window["second"] = list()
 
-        self.size_window = REQUEST.get_request("size_display", tup=True)
+        tmp = REQUEST.get_request("size_display", tup=True)
+        if not tmp:
+            tmp = [1000, 600]
+        self.size_window = tmp
 
         self.pos_top = 25
 
@@ -248,7 +257,10 @@ class Example(QMainWindow):
         self.gen_lab_nav.setStyleSheet(self.CSS_dict["gen_lab_nav"])
         self.main_work.window["navigation"].append(self.gen_lab_nav)
 
-        count = int(REQUEST.get_request("count_nav_but"))
+        tmp = REQUEST.get_request("count_nav_but")
+        if not tmp:
+            tmp = 4
+        count = int(tmp)
         pos = AD([0, 25,
                   self.size_window[0] // 4,
                   (self.size_window[1] - self.pos_top) // count])

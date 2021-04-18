@@ -7,30 +7,43 @@ from win32api import GetSystemMetrics
 
 class Request:  # Работает с базами данных
     def __init__(self):  # Ставит первоначальныю базу данных и таблицу
-        self.base = sqlite3.connect("data/SQL/Constant.db")
+        self.warning = False
         self.table = "constant"
-        self.admin_check(self.table)
+        try:
+            self.base = sqlite3.connect("data/SQL/Constant.db")
+            cur = self.base.cursor()
+        except sqlite3.OperationalError:
+            self.warning = True
+
 
     def setRequest(self, name):  # при вызове сменяет базу данных
         if ".db" not in name:
             name = name + ".db"
 
         self.base = sqlite3.connect(f"data/SQL/{name}")
-        self.admin_check(self.table)
+        # self.admin_check(self.table)
 
     def setTable(self, name):  # при вызове сменяет таблицу
         self.table = name
-        self.admin_check(self.table)
+        # self.admin_check(self.table)
 
     def get_request(self, request, tup=False, color=False, ignore=False):  # запрашивает данные
+        if self.warning:
+            return ""
+
         cur = self.base.cursor()
 
         table = self.table
+
+        if not self.admin_check(table):
+            return ""
+
         version = 'value'
 
         if color:  # если цвет правда, то он сменяет таблицу
             table = "appcolors"
-            self.admin_check(table)
+            if not self.admin_check(table):
+                return ""
 
             version = cur.execute(f"SELECT value FROM constant WHERE name == 'version'").fetchall()[0][0]
         result = cur.execute(f"SELECT {version} FROM {table} WHERE name == '{request}'").fetchall()
@@ -58,20 +71,28 @@ class Request:  # Работает с базами данных
 
     def get_full_request(self, col_check, get_col, if_request,
                          tup=False, color=False, null=False, table=None, all=True, ignore=False):
+        if self.warning:
+            return ""
+
         # запрашивает полный запрос с таблицей и всеми значениями
         cur = self.base.cursor()
         tablee = str(table)
         table = tablee
+        if not self.admin_check(table):
+            return ""
 
         if not tablee:  # если таблица не заполнена, то вводится стандартная
             table = self.table
 
         if color:  # если цвет правда, то он сменяет таблицу
             table = "appcolors"
-            self.admin_check(table)
+            if not self.admin_check(table):
+                return ""
 
         if tablee:
             table = tablee
+            if not self.admin_check(table):
+                return ""
 
         if null:  # запрашивает без условия
             result = cur.execute(f"SELECT {get_col} FROM {table}").fetchall()
@@ -106,10 +127,15 @@ class Request:  # Работает с базами данных
         return result
 
     def change_base(self, name, value, ignore=False):  # изменяет базу данных
+        if self.warning:
+            return ""
+
         cur = self.base.cursor()
 
-        self.admin_check(self.table, value='name', com=1)
-        self.admin_check(self.table, value='value', com=1)
+        tmp = self.admin_check(self.table, value='name', com=1)
+        tmp1 = self.admin_check(self.table, value='value', com=1)
+        if not tmp or not tmp1:
+            return ""
 
         cur.execute(f"""UPDATE {self.table} SET value == '{value}' WHERE name == '{name}'""")
         self.base.commit()
@@ -121,14 +147,18 @@ class Request:  # Работает с базами данных
                 try:
                     cur = self.base.cursor()
                     result = cur.execute(f"SELECT * FROM {table}").fetchall()
+                    return True
                 except sqlite3.OperationalError:
                     pprint(f"Несуществует {self.base} базы данных или {table} таблицы", warning="error")
+                    return False
             elif com == 1:
                 try:
                     cur = self.base.cursor()
                     result = cur.execute(f"SELECT {value} FROM {table}").fetchall()
+                    return True
                 except sqlite3.OperationalError:
                     pprint(f"Стобца {value} не существует", warning="error")
+                    return False
 
 
 class Work_size_window:  # работает с адаптацией окна
@@ -184,18 +214,27 @@ class Work_size_window:  # работает с адаптацией окна
 
 class Language:  # Изменение языка
     def __init__(self):
-        self.base = sqlite3.connect("data/SQL/Constant.db")
-        cur = self.base.cursor()
-        self.language = cur.execute(f"SELECT value FROM constant WHERE name == 'language'").fetchall()[0][0]
+        self.warning = False
 
-        self.admin_check()
+        try:
+            self.base = sqlite3.connect("data/SQL/Constant.db")
+            cur = self.base.cursor()
+        except sqlite3.OperationalError:
+            self.warning = True
+
         self.admin_check(table="language_value")
-        self.admin_check(value="name", com=1)
-        self.admin_check(value=self.language, com=1)
+
 
     def request(self, rec, ignore=False):
+        if not self.admin_check() or not self.admin_check(value="name", com=1) or self.warning:
+            return ""
+
         cur = self.base.cursor()
-        self.language = cur.execute(f"SELECT value FROM constant WHERE name == 'language'").fetchall()[0][0]
+        if not self.admin_check(table="constant"):
+            self.language = "eng"
+        else:
+            self.language = cur.execute(f"SELECT value FROM constant WHERE name == 'language'").fetchall()[0][0]
+
 
         result = cur.execute(f"SELECT {self.language} FROM language WHERE name == '{rec}'").fetchall()
 
@@ -225,14 +264,18 @@ class Language:  # Изменение языка
                 try:
                     cur = self.base.cursor()
                     result = cur.execute(f"SELECT * FROM {table}").fetchall()
+                    return True
                 except sqlite3.OperationalError:
                     pprint(f"Несуществует {self.base} базы данных или {table} таблицы", warning="error")
+                    return False
             elif com == 1:
                 try:
                     cur = self.base.cursor()
                     result = cur.execute(f"SELECT {value} FROM {table}").fetchall()
+                    return True
                 except sqlite3.OperationalError:
                     pprint(f"Стобца {value} не существует", warning="error")
+                    return False
 
 
 def pprint(*text, warning="default"):  # система отчетов
