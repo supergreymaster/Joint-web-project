@@ -4,6 +4,8 @@ from designer.secondary_functions import pprint, Request
 from PyQt5.QtWidgets import QFileDialog
 from designer.animation import Title_work
 from designer.Admin_system import Admin_system
+from get_link import get_link
+from translate_text import translate_text
 
 REQUEST = Request()
 
@@ -86,6 +88,17 @@ class Main_work:  # Главная функция где происходит о
             pprint("Отменна операции ", "фотография не вставлена")
         else:
             pprint("Вставленна фотография' ", fname)
+            text = get_link(fname)
+            if type(text) is str:
+                self.window["self"].win_2_tex_ret.setText(text)
+            else:
+                pprint("Возникла ошибка не удалось распознать текст", warning="warning")
+                self.window["self"].win_2_tex_ret.setText("Не удалось распознать текст")
+
+    def ccopy(self):
+        pprint("Использовалась команда' ", "копировать ", "текст")
+        pyperclip.copy(self.window["self"].win_2_tex_ret.toPlainText())
+        pprint("Скопирован текст ", self.window["self"].win_2_tex_ret.toPlainText())
 
     def ccopy1(self):  # Обрабатывает копирование первого текста
         pprint("Использовалась команда' ", "копировать ", "первый текст")
@@ -105,6 +118,10 @@ class Main_work:  # Главная функция где происходит о
         pprint("Использовалась команда' ", "изменить второй язык ")
         REQUEST.change_base("lan2", self.window["self"].sender().currentText())
 
+    def voice(self):
+        pprint("Использовалась команда' ", "озвучить текст")
+        text = self.window["self"].win_3_scr_1.toPlainText()
+
     def voice1(self):  # Обрабатывает озвучку первого текста
         pprint("Использовалась команда' ", "озвучить ", "первый текст")
         text = self.window["self"].win_3_scr_1.toPlainText()
@@ -115,6 +132,9 @@ class Main_work:  # Главная функция где происходит о
 
     def translate(self):  # Обрабатывает перевод текста
         pprint("Использовалась команда' ", "перевести текст ")
+        text = self.window["self"].win_3_scr_1.toPlainText()
+        text_lan = translate_text(text)
+        self.window["self"].win_3_scr_2.setText(text_lan)
 
     def transition_admin(self):
         pprint("Использовалась команда' ", "войти в ", "админскую систему")
