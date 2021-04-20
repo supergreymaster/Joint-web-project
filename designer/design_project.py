@@ -589,7 +589,10 @@ class Example(QMainWindow):
                   self.size_window[1] // 20])
         self.set_com_box_theme.setGeometry(pos[0], pos[1], pos[2], pos[3])
         # self.set_com_box_theme.
-        version = len(REQUEST.get_full_request("name", "*", "text", table="appcolors")[0]) - 3
+        tmp = REQUEST.get_full_request("name", "*", "text", table="appcolors")
+        if not tmp:
+            tmp = ["123"]
+        version = len(tmp[0]) - 3
         for i in range(1, version + 1):
             self.set_com_box_theme.addItem(f"version{i}")
 

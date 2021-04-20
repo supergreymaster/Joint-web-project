@@ -1,13 +1,15 @@
 import sys
 import pyperclip
-from designer.secondary_functions import pprint, Request
-from PyQt5.QtWidgets import QFileDialog
+from designer.secondary_functions import pprint, Request, Language
+from PyQt5.QtWidgets import QFileDialog, QMessageBox
 from designer.animation import Title_work
 from designer.Admin_system import Admin_system
-from get_link import get_link
+from get_text import get_text
 from translate_text import translate_text
+from text_voice import play_text
 
 REQUEST = Request()
+LANGUAGE = Language().request
 
 
 class Main_work:  # Главная функция где происходит обработка всех событий
@@ -72,12 +74,62 @@ class Main_work:  # Главная функция где происходит о
 
     def transformation_on_txt(self):  # Обрабатывает преобразование в txt
         pprint("Использовалась команда' ", "преобразовать в ", "txt")
+        filename, ok = QFileDialog.getSaveFileName(self.window["self"],
+                                                   LANGUAGE("save_file"),
+                                                   ".",
+                                                   "All Files(*.txt)")
+
+        if not ok:
+            pprint("Операция преобразовать в txt", " отменена")
+            return
+
+        if filename.split("/")[-1].split(".")[-1] == "txt":
+            pass
+        else:
+            filename = filename + ".txt"
+
+        text = self.window["self"].win_3_scr_1.toPlainText()
+
+        pprint("команда ", "преобразовать в' ", "txt", " выполнена успешно")
+        print(filename)
 
     def transformation_on_docx(self):  # Обрабатывает преобразование в docx
         pprint("Использовалась команда' ", "преобразовать в ", "docx")
+        filename, ok = QFileDialog.getSaveFileName(self.window["self"],
+                                                   LANGUAGE("save_file"),
+                                                   ".",
+                                                   "All Files(*.docx)")
+
+        if not ok:
+            pprint("Операция преобразовать в docx отменена")
+            return
+
+        if filename.split("/")[-1].split(".")[-1] == "docx":
+            pass
+        else:
+            filename = filename + ".docx"
+
+        text = self.window["self"].win_3_scr_1.toPlainText()
+        print(filename)
+        pprint("команда ", "преобразовать в' ", "docx", " выполнена успешно")
 
     def transformation_on_mp3(self):  # Обрабатывает преобразование в mp3
         pprint("Использовалась команда' ", "преобразовать в ", "mp3")
+        filename, ok = QFileDialog.getSaveFileName(self.window["self"],
+                                                   LANGUAGE("save_file"),
+                                                   ".",
+                                                   "All Files(*.mp3)")
+        if not ok:
+            pprint("Операция преобразовать в mp3 отменена")
+            return
+        if filename.split("/")[-1].split(".")[-1] == "mp3":
+            pass
+        else:
+            filename = filename + ".mp3"
+
+        text = self.window["self"].win_3_scr_1.toPlainText()
+        print(filename)
+        pprint("команда ", "преобразовать в' ", "mp3", " выполнена успешно")
 
     def choose_file(self):  # Обрабатывает выбор файла
         fname = QFileDialog.getOpenFileName(
@@ -88,7 +140,7 @@ class Main_work:  # Главная функция где происходит о
             pprint("Отменна операции ", "фотография не вставлена")
         else:
             pprint("Вставленна фотография' ", fname)
-            text = get_link(fname)
+            text = get_text(fname)
             if type(text) is str:
                 self.window["self"].win_2_tex_ret.setText(text)
             else:
@@ -120,20 +172,29 @@ class Main_work:  # Главная функция где происходит о
 
     def voice(self):
         pprint("Использовалась команда' ", "озвучить текст")
-        text = self.window["self"].win_3_scr_1.toPlainText()
+        text = self.window["self"].win_2_tex_ret.toPlainText()
+        lan = REQUEST.get_request("language")
+        play_text(text)
 
     def voice1(self):  # Обрабатывает озвучку первого текста
         pprint("Использовалась команда' ", "озвучить ", "первый текст")
         text = self.window["self"].win_3_scr_1.toPlainText()
+        lan = self.window["self"].win_3_com_box_lan1.currentText()
+        play_text(text)
 
     def voice2(self):  # Обрабатывает озвучку второго текста
         pprint("Использовалась команда' ", "озвучить ", "второй текст")
         text = self.window["self"].win_3_scr_2.toPlainText()
+        lan = self.window["self"].win_3_com_box_lan2.currentText()
+        play_text(text)
 
     def translate(self):  # Обрабатывает перевод текста
         pprint("Использовалась команда' ", "перевести текст ")
         text = self.window["self"].win_3_scr_1.toPlainText()
-        text_lan = translate_text(text)
+        try:
+            text_lan = translate_text(text)
+        except KeyError:
+            text_lan = LANGUAGE("error_tran")
         self.window["self"].win_3_scr_2.setText(text_lan)
 
     def transition_admin(self):
