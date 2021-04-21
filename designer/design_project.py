@@ -11,15 +11,14 @@ from designer.Main_work import Main_work
 from designer.secondary_functions import Request, Work_size_window, pprint, Language
 from designer.Admin_system import Admin_system
 
-
 try:
     # Включите в блок try/except, если вы также нацелены на Mac/Linux
     from PyQt5.QtWinExtras import QtWin
+
     myappid = 'mycompany.myproduct.subproduct.version'
     QtWin.setCurrentProcessExplicitAppUserModelID(myappid)
 except ImportError:
     pass
-
 
 # Создание заготовленых команд
 tmp = Language()
@@ -691,7 +690,7 @@ class Example(QMainWindow):
 
         self.set_text_monologue.setFont(self.font_text)
 
-        # self.set_text_monologue.setStyleSheet(self.CSS_dict["st_text_monologue"])
+        self.set_text_monologue.setStyleSheet(self.CSS_dict["st_text_monologue"])
         self.set_text_monologue.setGeometry(pos[0], pos[1], pos[2], pos[3])
         self.set_text_monologue.setEnabled(False)
         text = open(f"data/text/setting_monologue_{REQUEST.get_request('language')}.txt",
@@ -715,11 +714,19 @@ def except_hook(cls, exception, traceback):  # если произойдет о�
     sys.__excepthook__(cls, exception, traceback)
 
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    app.setWindowIcon(QIcon("../data/icon.ico"))  # пока не работает создает иконку приложения
+# def work():
+#     app = QApplication(sys.argv)
+#     app.setWindowIcon(QIcon("../data/icon.ico"))  # пока не работает создает иконку приложения
+#
+#     ex = Example()
+#     ex.show()
+#     sys.excepthook = except_hook
+#     sys.exit(app.exec())
+# if __name__ == '__main__':
+app = QApplication(sys.argv)
+app.setWindowIcon(QIcon("../data/icon.ico"))  # пока не работает создает иконку приложения
 
-    ex = Example()
-    ex.show()
-    sys.excepthook = except_hook
-    sys.exit(app.exec())
+ex = Example()
+ex.show()
+sys.excepthook = except_hook
+sys.exit(app.exec())

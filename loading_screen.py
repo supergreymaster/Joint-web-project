@@ -6,7 +6,6 @@ from random import choice
 
 def terminate():
     pg.quit()
-    sys.exit()
 
 
 def load_image(name, colorkey=None):
@@ -46,10 +45,11 @@ def play_intro(width, height, sprite_width, sprite_height):
     #                              'logo.png', self.all_sprites)
     FPS = 120
     cur_frame = 0
-    while True:
+    running = True
+    while running:
         for event in pg.event.get():
             if event.type == pg.QUIT:
-                terminate()
+                running = False
         clock.tick(FPS)
         screen.fill((255, 255, 255))
         if cur_frame > 59:
@@ -58,9 +58,11 @@ def play_intro(width, height, sprite_width, sprite_height):
             if sprite.rect.centerx < width // 2:
                 sprite.movement()
         if cur_frame > 250:
-            terminate()
+            running = False
+            break
         cur_frame += 1
         pg.display.flip()
+    pg.quit()
 
 
 # class Intro:
