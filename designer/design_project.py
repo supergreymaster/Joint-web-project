@@ -667,7 +667,7 @@ class Example(QMainWindow):
         self.set_but_feedback.setGeometry(pos[0], pos[1], pos[2], pos[3])
         self.set_but_feedback.setText(LANGUAGE("feedback"))
         self.set_but_feedback.setStyleSheet(self.CSS_dict["set_but_feedback"])
-        self.set_but_feedback.clicked.connect(self.main_work.transition_admin)
+        self.set_but_feedback.clicked.connect(self.main_work.feedback)
         self.main_work.window["setting"].append(self.set_but_feedback)
         self.main_work.window["second"].append(self.set_but_feedback)
 

@@ -309,7 +309,7 @@ def pprint(*text, warning="default"):  # система отчетов
         tmp = f"{tmp} | время {datetime.datetime.now()}"
         report.base["warning"].append(tmp)
         report.base["all"].append(tmp)
-    with open("data/reports/report.json", "w", encoding="utf-8") as file:
+    with open("../reports/report.json", "w", encoding="utf-8") as file:
         json.dump(report.base, file, ensure_ascii=False)
 
 
@@ -323,11 +323,11 @@ class Report_database:
 
 
 class Admin:  # система проверки админских прав
-    admin = False
+    admin = True
     file = open("data/text/admin.txt", encoding="utf-8").read()
-    if file == "False":
+    if file == "True":
         admin = False
-    elif file == "True":
+    elif file == "False":
         admin = True
 
 

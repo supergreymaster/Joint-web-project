@@ -29,7 +29,7 @@ class Admin_system(QMainWindow):
 
         self.request = QComboBox(self.verticalLayoutWidget)
         self.request.addItem("Все запросы")
-        with open("data/reports/report.json", encoding="utf-8") as file:
+        with open("../reports/report.json", encoding="utf-8") as file:
             test = json.load(file)
         for i in test["default"]:
             self.request.addItem(i)
@@ -118,7 +118,7 @@ class Admin_system(QMainWindow):
                     self.textEdit_request.append(i)
 
     def mistake(self):
-        with open("data/reports/report.json", encoding="utf-8") as file:
+        with open("../reports/report.json", encoding="utf-8") as file:
             test = json.load(file)
 
         all_request = len(test["all"])
@@ -134,7 +134,7 @@ class Admin_system(QMainWindow):
         self.debug.display(c)
 
     def rec_all(self):
-        with open("data/reports/report.json", encoding="utf-8") as file:
+        with open("../reports/report.json", encoding="utf-8") as file:
             test = json.load(file)
 
         if not test["all"]:
@@ -146,7 +146,7 @@ class Admin_system(QMainWindow):
             c += 1
 
     def rec_warning(self):
-        with open("data/reports/report.json", encoding="utf-8") as file:
+        with open("../reports/report.json", encoding="utf-8") as file:
             test = json.load(file)
 
         if not test["warning"]:
@@ -158,7 +158,7 @@ class Admin_system(QMainWindow):
             c += 1
 
     def rec_error(self):
-        with open("data/reports/report.json", encoding="utf-8") as file:
+        with open("../reports/report.json", encoding="utf-8") as file:
             test = json.load(file)
 
         if not test["error"]:
@@ -170,7 +170,7 @@ class Admin_system(QMainWindow):
             c += 1
 
     def rec_default_all(self):
-        with open("data/reports/report.json", encoding="utf-8") as file:
+        with open("../reports/report.json", encoding="utf-8") as file:
             test = json.load(file)
 
         if not test["default"]:
@@ -183,7 +183,7 @@ class Admin_system(QMainWindow):
                 c += 1
 
     def rec_default(self, text):
-        with open("data/reports/report.json", encoding="utf-8") as file:
+        with open("../reports/report.json", encoding="utf-8") as file:
             test = json.load(file)
 
         for i in test["default"]:
@@ -199,14 +199,14 @@ class Admin_system(QMainWindow):
         if self.warning_request.currentText() == "Все ошибки":
             self.request.clear()
             self.request.addItem("Все запросы")
-            with open("data/reports/report.json", encoding="utf-8") as file:
+            with open("../reports/report.json", encoding="utf-8") as file:
                 test = json.load(file)
             for i in test["default"]:
                 self.request.addItem(i)
         elif self.warning_request.currentText() == "Debug":
             self.request.clear()
             self.request.addItem("Все запросы")
-            with open("data/reports/report.json", encoding="utf-8") as file:
+            with open("../reports/report.json", encoding="utf-8") as file:
                 test = json.load(file)
             for i in test["default"]:
                 self.request.addItem(i)

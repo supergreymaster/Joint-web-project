@@ -6,8 +6,9 @@ from designer.animation import Title_work
 from designer.Admin_system import Admin_system
 from get_text import get_text
 from translate_text import translate_text
-from text_voice import play_text
+from text_voice import play_text, save_text_as_mp3
 from save_text import save_docx_text, save_txt_text
+from help_form import Main
 
 REQUEST = Request()
 LANGUAGE = Language().request
@@ -92,6 +93,10 @@ class Main_work:  # Главная функция где происходит о
         text = self.window["self"].win_2_tex_ret.toPlainText()
 
         save_txt_text(filename, text)
+        msg = QMessageBox(self.window["self"])
+        msg.setText("Функция выполнена успешно")
+        msg.setWindowTitle("Успех")
+        x = msg.exec_()
         pprint("команда ", "преобразовать в' ", "txt", " выполнена успешно")
 
     def transformation_on_docx(self):  # Обрабатывает преобразование в docx
@@ -112,6 +117,11 @@ class Main_work:  # Главная функция где происходит о
 
         text = self.window["self"].win_2_tex_ret.toPlainText()
         save_docx_text(filename, text)
+
+        msg = QMessageBox(self.window["self"])
+        msg.setText("Функция выполнена успешно")
+        msg.setWindowTitle("Успех")
+        x = msg.exec_()
         pprint("команда ", "преобразовать в' ", "docx", " выполнена успешно")
 
     def transformation_on_mp3(self):  # Обрабатывает преобразование в mp3
@@ -128,7 +138,14 @@ class Main_work:  # Главная функция где происходит о
         else:
             filename = filename + ".mp3"
 
-        text = self.window["self"].win_3_scr_1.toPlainText()
+        text = self.window["self"].win_2_tex_ret.toPlainText()
+
+        save_text_as_mp3(text, filename, REQUEST.get_request("language")[:-1])
+
+        msg = QMessageBox(self.window["self"])
+        msg.setText("Функция выполнена успешно")
+        msg.setWindowTitle("Успех")
+        x = msg.exec_()
         pprint("команда ", "преобразовать в' ", "mp3", " выполнена успешно")
 
     def choose_file(self):  # Обрабатывает выбор файла
@@ -212,3 +229,5 @@ class Main_work:  # Главная функция где происходит о
 
     def feedback(self):
         pprint("Использовалась команда' ", "обратной связи")
+        self.window["self"].w3 = Main()
+        self.window["self"].w3.show()
