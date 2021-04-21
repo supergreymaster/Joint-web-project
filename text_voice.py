@@ -13,8 +13,8 @@ def save_text_as_mp3(text, file_name, lang):
 
 def play_text(text, lang):
     try:
-        languages_id = {'ru': 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_RU-RU_IRINA_11.0',
-                        'en': 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0'}
+        languages_id = {'rus': 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_RU-RU_IRINA_11.0',
+                        'eng': 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0'}
         engine = pyttsx3.init()
         engine.setProperty('rate', 150)
         engine.setProperty('volume', 1)

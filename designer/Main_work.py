@@ -174,19 +174,19 @@ class Main_work:  # Главная функция где происходит о
         pprint("Использовалась команда' ", "озвучить текст")
         text = self.window["self"].win_2_tex_ret.toPlainText()
         lan = REQUEST.get_request("language")
-        play_text(text)
+        play_text(text, lan)
 
     def voice1(self):  # Обрабатывает озвучку первого текста
         pprint("Использовалась команда' ", "озвучить ", "первый текст")
         text = self.window["self"].win_3_scr_1.toPlainText()
-        lan = self.window["self"].win_3_com_box_lan1.currentText()
-        play_text(text)
+        lan = REQUEST.get_request("lan1")
+        play_text(text, lan)
 
     def voice2(self):  # Обрабатывает озвучку второго текста
         pprint("Использовалась команда' ", "озвучить ", "второй текст")
         text = self.window["self"].win_3_scr_2.toPlainText()
-        lan = self.window["self"].win_3_com_box_lan2.currentText()
-        play_text(text)
+        lan = REQUEST.get_request("lan2")
+        play_text(text, lan)
 
     def translate(self):  # Обрабатывает перевод текста
         pprint("Использовалась команда' ", "перевести текст ")
