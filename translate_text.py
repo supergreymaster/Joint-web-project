@@ -13,9 +13,8 @@ oauth_token = 'AQAAAAAVdxsdAATuwSCvXz4_A0kLkDik2MpRZ1I'
 '''Добавить другие языки не проблема, но разберемся с этим позже'''
 
 
-def translate_text(text):
+def translate_text(text, targetLang):
     sourceLang = detect_language(text)
-    targetLang = 'ru' if sourceLang == 'en' else 'en'
     iam_token = get_iam_token(iam_url, oauth_token)
     v_url = 'https://translate.api.cloud.yandex.net/translate/v2/translate'
     res = requests.post(v_url, headers={'Authorization': 'Bearer ' + iam_token}, json={
@@ -26,4 +25,4 @@ def translate_text(text):
         ],
         "folderId": folderId
     })
-    return ast.literal_eval(res.text)['translations'][0]['text']
+    return ast.literal_eval(res.text)['translations'][0]['text'], sourceLang, targetLang
