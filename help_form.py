@@ -1,7 +1,9 @@
 import sys
 import smtplib
+from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from os.path import basename
 
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QTextEdit, QPushButton, QMessageBox
@@ -117,6 +119,15 @@ class Main(QWidget):
                 body = f'Получен новый вопрос.\nОтправитель: {addr_to}\n' \
                        f'Текст: "{self.question.toPlainText()}"'
                 msg.attach(MIMEText(body, 'plain'))
+
+                path_report = 'reports/report.json'
+                with open(path_report, 'rb') as report:
+                    part = MIMEApplication(
+                        report.read(),
+                        name=basename(path_report)
+                    )
+                    part['Content-Disposition'] = 'attachment; filename="%s"' % basename(path_report)
+                    msg.attach(part)
                 server.send_message(msg)
                 server.quit()
                 msg = QMessageBox(self)
