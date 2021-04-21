@@ -44,10 +44,9 @@ def play_intro(width, height, sprite_width, sprite_height):
     sprite = AnimatedSprite(0, height // 2, sprite_image, all_sprites)
     # self.sprite = AnimatedSprite(0, height // 2, sprite_width, sprite_height,
     #                              'logo.png', self.all_sprites)
-    FPS = 60
+    FPS = 120
     cur_frame = 0
     while True:
-        print(cur_frame)
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 terminate()

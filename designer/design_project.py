@@ -5,11 +5,22 @@ from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QLabe
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtGui import QPixmap, QFont, QIcon, QCursor
 from PyQt5.QtCore import QSize, Qt
+from PyQt5.QtWinExtras import QWinTaskbarButton
 
 # Импорт модулей из secondary_function и Main_work
 from designer.Main_work import Main_work
 from designer.secondary_functions import Request, Work_size_window, pprint, Language
 from designer.Admin_system import Admin_system
+
+
+try:
+    # Включите в блок try/except, если вы также нацелены на Mac/Linux
+    from PyQt5.QtWinExtras import QtWin
+    myappid = 'mycompany.myproduct.subproduct.version'
+    QtWin.setCurrentProcessExplicitAppUserModelID(myappid)
+except ImportError:
+    pass
+
 
 # Создание заготовленых команд
 tmp = Language()
@@ -37,6 +48,8 @@ CSS_pre = ":pressed"
 class Example(QMainWindow):
     def __init__(self):  # инициальзаруется Main_work
         super().__init__()
+        self.setWindowIcon(QIcon("../data/icon.ico"))
+
         self.main_work = Main_work()
         self.main_work.window["save"] = list()
         self.main_work.window["self"] = self
@@ -705,7 +718,8 @@ def except_hook(cls, exception, traceback):  # если произойдет о�
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    app.setWindowIcon(QIcon("photo/game_icon.png"))  # пока не работает создает иконку приложения
+    app.setWindowIcon(QIcon("../data/icon.ico"))  # пока не работает создает иконку приложения
+
     ex = Example()
     ex.show()
     sys.excepthook = except_hook
