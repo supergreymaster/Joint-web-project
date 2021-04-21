@@ -190,7 +190,7 @@ class Main_work:  # Главная функция где происходит о
     def voice(self):
         pprint("Использовалась команда' ", "озвучить текст")
         text = self.window["self"].win_2_tex_ret.toPlainText()
-        lan = REQUEST.get_request("language")
+        lan = REQUEST.get_request("language")[:-1]
         play_text(text, lan)
 
     def voice1(self):  # Обрабатывает озвучку первого текста
@@ -208,10 +208,15 @@ class Main_work:  # Главная функция где происходит о
     def translate(self):  # Обрабатывает перевод текста
         pprint("Использовалась команда' ", "перевести текст ")
         text = self.window["self"].win_3_scr_1.toPlainText()
+
         try:
-            text_lan = translate_text(text)
+            text_lan, lan1, lan2 = translate_text(text, REQUEST.get_request("lan2"))
+            # print(lan1, lan2)
+            REQUEST.change_base("lan1", lan1)
+            REQUEST.change_base("lan2", lan2)
+            self.window["self"].win_3_com_box_lan1.setCurrentText(REQUEST.get_request("lan1"))
         except KeyError:
-            text_lan = LANGUAGE("error_tran")
+             text_lan = LANGUAGE("error_tran")
         self.window["self"].win_3_scr_2.setText(text_lan)
 
     def transition_admin(self):

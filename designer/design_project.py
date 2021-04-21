@@ -5,7 +5,6 @@ from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QLabe
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtGui import QPixmap, QFont, QIcon, QCursor
 from PyQt5.QtCore import QSize, Qt
-from PyQt5.QtWinExtras import QWinTaskbarButton
 
 # Импорт модулей из secondary_function и Main_work
 from designer.Main_work import Main_work
@@ -686,13 +685,13 @@ class Example(QMainWindow):
 
         # Создает дополнительные подсказки
         self.set_text_monologue = QTextEdit(self)
-        pos = AD([self.size_window[0] // 3, self.size_window[1] // 8,
-                  self.size_window[0] - self.size_window[0] // 1.5,
-                  self.size_window[1] // 1.5])
+        pos = AD([self.size_window[0] // 3.5, self.size_window[1] // 8,
+                  self.size_window[0] - self.size_window[0] // 2,
+                  self.size_window[1] // 1.2])
 
         self.set_text_monologue.setFont(self.font_text)
 
-        self.set_text_monologue.setStyleSheet(self.CSS_dict["st_text_monologue"])
+        # self.set_text_monologue.setStyleSheet(self.CSS_dict["st_text_monologue"])
         self.set_text_monologue.setGeometry(pos[0], pos[1], pos[2], pos[3])
         self.set_text_monologue.setEnabled(False)
         text = open(f"data/text/setting_monologue_{REQUEST.get_request('language')}.txt",
