@@ -309,7 +309,7 @@ def pprint(*text, warning="default"):  # система отчетов
         tmp = f"{tmp} | время {datetime.datetime.now()}"
         report.base["warning"].append(tmp)
         report.base["all"].append(tmp)
-    with open("../reports/report.json", "w", encoding="utf-8") as file:
+    with open("reports/report.json", "w", encoding="utf-8") as file:
         json.dump(report.base, file, ensure_ascii=False)
 
 

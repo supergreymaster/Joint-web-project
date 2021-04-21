@@ -1,9 +1,9 @@
 import sys
 import pyperclip
-from designer.secondary_functions import pprint, Request, Language
+from secondary_functions import pprint, Request, Language
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
-from designer.animation import Title_work
-from designer.Admin_system import Admin_system
+from animation import Title_work
+from Admin_system import Admin_system
 from get_text import get_text
 from translate_text import translate_text
 from text_voice import play_text, save_text_as_mp3

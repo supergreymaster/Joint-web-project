@@ -1,5 +1,5 @@
 import pygame
-from designer.secondary_functions import Request, pprint, Language
+from secondary_functions import Request, pprint, Language
 
 LANGUAGE = Language().request
 
