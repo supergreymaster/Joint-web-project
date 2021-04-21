@@ -713,19 +713,21 @@ def except_hook(cls, exception, traceback):  # если произойдет о�
     sys.__excepthook__(cls, exception, traceback)
 
 
-# def work():
-#     app = QApplication(sys.argv)
-#     app.setWindowIcon(QIcon("../data/icon.ico"))  # пока не работает создает иконку приложения
-#
-#     ex = Example()
-#     ex.show()
-#     sys.excepthook = except_hook
-#     sys.exit(app.exec())
-# if __name__ == '__main__':
-app = QApplication(sys.argv)
-app.setWindowIcon(QIcon("data/icon.ico"))  # пока не работает создает иконку приложения
+def work():
+    app = QApplication(sys.argv)
+    app.setWindowIcon(QIcon("../data/icon.ico"))
 
-ex = Example()
-ex.show()
-sys.excepthook = except_hook
-sys.exit(app.exec())
+    ex = Example()
+    ex.show()
+    sys.excepthook = except_hook
+    sys.exit(app.exec())
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    app.setWindowIcon(QIcon("data/icon.ico"))
+
+    ex = Example()
+    ex.show()
+    sys.excepthook = except_hook
+    sys.exit(app.exec())
