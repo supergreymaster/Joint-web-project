@@ -50,6 +50,7 @@ def play_intro(width, height, sprite_width, sprite_height):
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 running = False
+                sys.exit(0)
         clock.tick(FPS)
         screen.fill((255, 255, 255))
         if cur_frame > 59:

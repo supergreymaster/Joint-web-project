@@ -384,6 +384,13 @@ def Title_work():
     hello.font.setPointSize(30)
     list_all.append(hello)
 
+    wrong = Label(screen)
+    wrong.setGeometry(100, 150, 250, 30)
+    wrong.setColor(request.get_request("text", color=True))
+    wrong.setText('')
+    wrong.font.setPointSize(16)
+    list_all.append(wrong)
+
     login = Lineedit(screen)
     login.setGeometry(10, 50, 250, 30)
     login.setBackGround(True)
@@ -416,10 +423,12 @@ def Title_work():
     def work():
         global running
         if bool(login.text) and bool(password.text):
-            request.change_base("user_login", login.text)
-            request.change_base("user_password", password.text)
-            request.change_base("user", "1")
-            running = False
+            if request.get_request("user_login") == login.text and \
+                request.get_request("user_password") == password.text:
+                request.change_base("user", "1")
+                running = False
+            else:
+                wrong.setText(LANGUAGE("wrong"))
 
     send = PushButton(screen)
     send.setGeometry(10, 150, 100, 25)
