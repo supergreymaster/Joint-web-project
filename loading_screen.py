@@ -91,5 +91,5 @@ class Intro:
             pg.display.flip()
 
 
-intro = Intro(800, 700, 300, 50, 50, 50)
+# intro = Intro(800, 700, 300, 50, 50, 50)
 
