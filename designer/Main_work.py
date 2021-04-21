@@ -7,6 +7,7 @@ from designer.Admin_system import Admin_system
 from get_text import get_text
 from translate_text import translate_text
 from text_voice import play_text
+from save_text import save_docx_text, save_txt_text
 
 REQUEST = Request()
 LANGUAGE = Language().request
@@ -88,10 +89,10 @@ class Main_work:  # Главная функция где происходит о
         else:
             filename = filename + ".txt"
 
-        text = self.window["self"].win_3_scr_1.toPlainText()
+        text = self.window["self"].win_2_tex_ret.toPlainText()
 
+        save_txt_text(filename, text)
         pprint("команда ", "преобразовать в' ", "txt", " выполнена успешно")
-        print(filename)
 
     def transformation_on_docx(self):  # Обрабатывает преобразование в docx
         pprint("Использовалась команда' ", "преобразовать в ", "docx")
@@ -109,8 +110,8 @@ class Main_work:  # Главная функция где происходит о
         else:
             filename = filename + ".docx"
 
-        text = self.window["self"].win_3_scr_1.toPlainText()
-        print(filename)
+        text = self.window["self"].win_2_tex_ret.toPlainText()
+        save_docx_text(filename, text)
         pprint("команда ", "преобразовать в' ", "docx", " выполнена успешно")
 
     def transformation_on_mp3(self):  # Обрабатывает преобразование в mp3
@@ -128,7 +129,6 @@ class Main_work:  # Главная функция где происходит о
             filename = filename + ".mp3"
 
         text = self.window["self"].win_3_scr_1.toPlainText()
-        print(filename)
         pprint("команда ", "преобразовать в' ", "mp3", " выполнена успешно")
 
     def choose_file(self):  # Обрабатывает выбор файла
