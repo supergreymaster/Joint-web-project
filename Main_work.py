@@ -191,18 +191,24 @@ class Main_work:  # Главная функция где происходит о
         pprint("Использовалась команда' ", "озвучить текст")
         text = self.window["self"].win_2_tex_ret.toPlainText()
         lan = REQUEST.get_request("language")[:-1]
+        if not lan:
+            lan = "en"
         play_text(text, lan)
 
     def voice1(self):  # Обрабатывает озвучку первого текста
         pprint("Использовалась команда' ", "озвучить ", "первый текст")
         text = self.window["self"].win_3_scr_1.toPlainText()
         lan = REQUEST.get_request("lan1")
+        if not lan:
+            lan = "en"
         play_text(text, lan)
 
     def voice2(self):  # Обрабатывает озвучку второго текста
         pprint("Использовалась команда' ", "озвучить ", "второй текст")
         text = self.window["self"].win_3_scr_2.toPlainText()
         lan = REQUEST.get_request("lan2")
+        if not lan:
+            lan = "en"
         play_text(text, lan)
 
     def translate(self):  # Обрабатывает перевод текста
@@ -210,7 +216,10 @@ class Main_work:  # Главная функция где происходит о
         text = self.window["self"].win_3_scr_1.toPlainText()
 
         try:
-            text_lan, lan1, lan2 = translate_text(text, REQUEST.get_request("lan2"))
+            tmp = REQUEST.get_request("lan2")
+            if not tmp:
+                tmp = "en"
+            text_lan, lan1, lan2 = translate_text(text, tmp)
             # print(lan1, lan2)
             REQUEST.change_base("lan1", lan1)
             REQUEST.change_base("lan2", lan2)
