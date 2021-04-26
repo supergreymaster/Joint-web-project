@@ -1,6 +1,6 @@
 # Joint-web-project
 the project was created by 3 people
-# Запускать в файле Start of the program
+# Запускать в файле TextAssistant
 # Файл Admin_system
 Отвечает за систему администрирования
 # Файл animation

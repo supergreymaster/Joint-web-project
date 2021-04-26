@@ -139,7 +139,9 @@ class Main_work:  # Главная функция где происходит о
             filename = filename + ".mp3"
 
         text = self.window["self"].win_2_tex_ret.toPlainText()
-
+        if not text.strip():
+            pprint("Операция преобразовать в mp3 отменена")
+            return
         save_text_as_mp3(text, filename, REQUEST.get_request("language")[:-1])
 
         msg = QMessageBox(self.window["self"])
