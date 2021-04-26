@@ -1,0 +1,5 @@
+                                     Help
+Text Recognizer. In order to recognize the text in any image, you need to click on the corresponding button and select the file, after which the recognized text will be displayed on the screen.
+Converters. They convert the text on the screen into different types of data
+Translator. It translates the text on the right side and outputs in another language on the left side
+Also, each function is equipped with additional features, voice acting and copying

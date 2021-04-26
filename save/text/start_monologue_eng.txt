@@ -1,0 +1,6 @@
+Welcome to our app.
+It was created to simplify working with text.
+How our app works
+1. Text converter. It recognizes text from an image, vocalizes it, and converts it to various formats.
+2. Translator. It translates text from one language to another
+If you have any problems, please contact us.
