@@ -43,7 +43,7 @@ def play_intro(width, height, sprite_width, sprite_height):
     sprite = AnimatedSprite(0, height // 2, sprite_image, all_sprites)
     # self.sprite = AnimatedSprite(0, height // 2, sprite_width, sprite_height,
     #                              'logo.png', self.all_sprites)
-    FPS = 120
+    FPS = 75
     cur_frame = 0
     running = True
     while running:
