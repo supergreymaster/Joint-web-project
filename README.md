@@ -1,4 +1,4 @@
-# Joint-web-project
+# TextAssistant
 the project was created by 3 people
 # Запускать в файле TextAssistant
 # Файл Admin_system
