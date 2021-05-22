@@ -119,8 +119,8 @@ class Main_work:  # Главная функция где происходит о
         save_docx_text(filename, text)
 
         msg = QMessageBox(self.window["self"])
-        msg.setText("Функция выполнена успешно")
-        msg.setWindowTitle("Успех")
+        msg.setText(LANGUAGE("success"))
+        msg.setWindowTitle(LANGUAGE("title_success"))
         x = msg.exec_()
         pprint("команда ", "преобразовать в' ", "docx", " выполнена успешно")
 
@@ -145,15 +145,16 @@ class Main_work:  # Главная функция где происходит о
         save_text_as_mp3(text, filename, REQUEST.get_request("language")[:-1])
 
         msg = QMessageBox(self.window["self"])
-        msg.setText("Функция выполнена успешно")
-        msg.setWindowTitle("Успех")
+        msg.setText(LANGUAGE("success"))
+        msg.setWindowTitle(LANGUAGE("title_success"))
         x = msg.exec_()
         pprint("команда ", "преобразовать в' ", "mp3", " выполнена успешно")
 
     def choose_file(self):  # Обрабатывает выбор файла
         fname = QFileDialog.getOpenFileName(
-            self.window["self"], 'Выбрать картинку', '',
-            'Картинка (*.jpg *.png);;Картинка (*.png);;Картинка (*.jpg);;Все файлы (*)')[0]
+            self.window["self"], LANGUAGE("choose_file"), '',
+            f'{LANGUAGE("image")} (*.jpg *.png);;{LANGUAGE("image")} (*.png);;'
+            f'{LANGUAGE("image")} (*.jpg);;{LANGUAGE("all_file")} (*)')[0]
         self.window["fname"] = fname
         if not fname:
             pprint("Отменна операции ", "фотография не вставлена")
@@ -163,8 +164,8 @@ class Main_work:  # Главная функция где происходит о
             if type(text) is str:
                 self.window["self"].win_2_tex_ret.setText(text)
             else:
-                pprint("Возникла ошибка не удалось распознать текст", warning="warning")
-                self.window["self"].win_2_tex_ret.setText("Не удалось распознать текст")
+                pprint("Нет связи с функцией get_text", warning="warning")
+                self.window["self"].win_2_tex_ret.setText(LANGUAGE("error_prer"))
 
     def ccopy(self):
         pprint("Использовалась команда' ", "копировать ", "текст")
@@ -191,6 +192,9 @@ class Main_work:  # Главная функция где происходит о
 
     def voice(self):
         pprint("Использовалась команда' ", "озвучить текст")
+        if not self.warning():
+            pprint("Отменена команда' ", "озвучить текст")
+            return
         text = self.window["self"].win_2_tex_ret.toPlainText()
         lan = REQUEST.get_request("language")[:-1]
         if not lan:
@@ -199,6 +203,9 @@ class Main_work:  # Главная функция где происходит о
 
     def voice1(self):  # Обрабатывает озвучку первого текста
         pprint("Использовалась команда' ", "озвучить ", "первый текст")
+        if not self.warning():
+            pprint("Отменена команда' ", "озвучить ", "первый текст")
+            return
         text = self.window["self"].win_3_scr_1.toPlainText()
         lan = REQUEST.get_request("lan1")
         if not lan:
@@ -207,6 +214,9 @@ class Main_work:  # Главная функция где происходит о
 
     def voice2(self):  # Обрабатывает озвучку второго текста
         pprint("Использовалась команда' ", "озвучить ", "второй текст")
+        if not self.warning():
+            pprint("Отменена команда' ", "озвучить ", "второй текст")
+            return
         text = self.window["self"].win_3_scr_2.toPlainText()
         lan = REQUEST.get_request("lan2")
         if not lan:
@@ -227,7 +237,7 @@ class Main_work:  # Главная функция где происходит о
             REQUEST.change_base("lan2", lan2)
             self.window["self"].win_3_com_box_lan1.setCurrentText(REQUEST.get_request("lan1"))
         except KeyError:
-             text_lan = LANGUAGE("error_tran")
+            text_lan = LANGUAGE("error_tran")
         self.window["self"].win_3_scr_2.setText(text_lan)
 
     def transition_admin(self):
@@ -237,6 +247,17 @@ class Main_work:  # Главная функция где происходит о
             if tmp:
                 return
         self.admin_sys()
+
+    def warning(self):  # обрабатывает предупреждение пользователя
+        msg = QMessageBox.question(self.window["self"], LANGUAGE("warn"),
+                                   LANGUAGE("warn1"),
+                                   QMessageBox.Ok | QMessageBox.Cancel, QMessageBox.Cancel)
+        if msg == QMessageBox.Ok:
+            return True
+        elif msg == QMessageBox.Cancel:
+            return False
+        else:
+            return False
 
     def admin_sys(self):
         pprint("Использовалась команда' ", "ввойти в ", "админскую систему")
