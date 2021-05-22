@@ -4,3 +4,7 @@ pyttsx3~=2.90
 gTTS~=2.2.2
 pygame~=2.0.1
 python-docx
+python-docx
+PyQT5
+pyperclip
+pypiwin32
