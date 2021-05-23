@@ -4,6 +4,7 @@ from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from os.path import basename
+from secondary_functions import Language
 
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QTextEdit, QPushButton, QMessageBox
@@ -11,12 +12,13 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QTextEdit, QPushBu
 '''Появляется окно, в котором можно написать сообщение.
 В итоге мы получим вопрос от пользователя на нашу почту,
 А сам пользователь получит информационное письмо, что ответ поступит скоро'''
+LANGUAGE = Language().request
 
 
 class Main(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('Техническая поддержка')
+        self.setWindowTitle(LANGUAGE("support"))
         self.setGeometry(600, 300, 500, 570)
         self.initUi()
 
@@ -25,7 +27,7 @@ class Main(QWidget):
 
         self.email = QLineEdit(self)
         self.email.setFont(QFont("Times New Roman", 14))
-        self.email.setPlaceholderText("Введите электронную почту")
+        self.email.setPlaceholderText(LANGUAGE("in_em"))
         self.email.setFixedHeight(40)
         self.email.setStyleSheet("""
         QLineEdit{
@@ -39,7 +41,7 @@ class Main(QWidget):
 
         self.question = QTextEdit(self)
         self.question.setFont(QFont("Times New Roman", 14))
-        self.question.setPlaceholderText("Опишите проблему")
+        self.question.setPlaceholderText(LANGUAGE("problem"))
         self.question.setStyleSheet("""
         QTextEdit{
             border: 1px solid #CCD6DD;
@@ -51,7 +53,7 @@ class Main(QWidget):
 
         self.send_question = QPushButton(self)
         self.send_question.setFont(QFont("Times New Roman", 14))
-        self.send_question.setText('Отправить')
+        self.send_question.setText(LANGUAGE("send"))
         self.send_question.move(350, 520)
         self.send_question.clicked.connect(self.sending)
         self.send_question.setStyleSheet("""
@@ -78,16 +80,16 @@ class Main(QWidget):
     def sending(self):
         if self.email.text() == '':
             msg = QMessageBox(self)
-            msg.setText("EMail не обнаружен")
+            msg.setText(LANGUAGE("wrong3"))
             msg.setIcon(QMessageBox.Critical)
-            msg.setWindowTitle("Ошибка")
+            msg.setWindowTitle(LANGUAGE("mistake"))
             msg.setFont(QFont("Times New Roman", 14))
             x = msg.exec_()
         elif self.question.toPlainText() == '':
             msg = QMessageBox(self)
             msg.setIcon(QMessageBox.Critical)
-            msg.setText("Сообщение не может быть пустым")
-            msg.setWindowTitle("Ошибка")
+            msg.setText(LANGUAGE("wrong2"))
+            msg.setWindowTitle(LANGUAGE("mistake"))
             msg.setFont(QFont("Times New Roman", 14))
             x = msg.exec_()
         else:
@@ -131,16 +133,16 @@ class Main(QWidget):
                 server.send_message(msg)
                 server.quit()
                 msg = QMessageBox(self)
-                msg.setText("Ваш вопрос отправлен.")
-                msg.setWindowTitle("Успех")
+                msg.setText(LANGUAGE("send_request"))
+                msg.setWindowTitle(LANGUAGE("title_success"))
                 msg.setFont(QFont("Times New Roman", 14))
                 x = msg.exec_()
                 self.close()
             except Exception as e:
                 msg = QMessageBox(self)
-                msg.setText("Что-то пошло не так. Попробуйте еще раз.")
+                msg.setText(LANGUAGE("wrong1"))
                 msg.setIcon(QMessageBox.Critical)
-                msg.setWindowTitle("Ошибка")
+                msg.setWindowTitle(LANGUAGE("mistake"))
                 msg.setFont(QFont("Times New Roman", 14))
                 x = msg.exec_()
 

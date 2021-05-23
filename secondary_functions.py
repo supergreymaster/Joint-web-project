@@ -222,7 +222,7 @@ class Language:  # Изменение языка
         except sqlite3.OperationalError:
             self.warning = True
 
-        self.admin_check(table="language_value")
+        # self.admin_check(table="language_value")
 
     def request(self, rec, ignore=False):
         if not self.admin_check() or not self.admin_check(value="name", com=1) or self.warning:
